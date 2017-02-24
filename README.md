@@ -1,6 +1,6 @@
 # Air
 
-This is php script for mysql database in php help to perfor most of php task 
+This is php script for mysql database in php help to perform most of php tasks of mysql
 
 
 
