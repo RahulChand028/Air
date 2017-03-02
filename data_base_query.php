@@ -10,10 +10,8 @@ final class data_base_query{
            $this->host = $host;
            $this->user = $user;
            $this->key = $key;
-     }
-     
+     }   
      function db_conn($data_base){
-
             $this->link_open = mysqli_connect("$this->host","$this->user","$this->key");
             if(!$this->link_open){ 
                    echo "Failed to connect to MySQL: " . mysqli_connect_error();
@@ -28,23 +26,16 @@ final class data_base_query{
              }
              return 1;
      }
-
-          function insert_value(){
-
+      function insert_value(){
                  $arg_num = func_num_args();
                  $arguments = func_get_args();
-
                         if($arg_num >=4 && $arg_num%2 == 0){
-                 
                               if(!data_base_query::db_conn($arguments[0])){
                                      return 0;
                               }
-
                               $Q = "INSERT INTO $arguments[1] (";
                               $x = 2;
-
                               while($x < ($arg_num-2)/2+2){
-
                                     if($x == 2){
                                            $Q = $Q.$arguments[$x];
                                     }
@@ -53,11 +44,8 @@ final class data_base_query{
                                     }
                                     $x++;
                               }
-
                              $Q = $Q.") VALUES ("; 
-
                              while($x < $arg_num){
-
                                     if($x == ($arg_num-2)/2+2){
                                            $Q = $Q."'".$arguments[$x]."'";
                                     }
@@ -66,9 +54,7 @@ final class data_base_query{
                                     }
                                     $x++;
                               }
-
                               $Q = $Q." )";
-
                               if(mysqli_query($this->link_open,$Q)){ 
                                     if(mysqli_affected_rows($this->link_open) > 0){              
                                            mysqli_close($this->link_open);
@@ -89,19 +75,14 @@ final class data_base_query{
                               return 0;
                        }
         }
-
-          function delete(){
-
+        function delete(){
                    $arg_num = func_num_args();
                    $arguments = func_get_args();
-
                    if($arg_num == 4 || $arg_num == 6){
-
                         if(!data_base_query::db_conn($arguments[0])){
                                 return 0;
                          }
                          if($arg_num == 4){
-
                                if($arguments[3] == "NULL"){
                                          $Q = "DELETE FROM $arguments[1] WHERE $arguments[2] IS $arguments[3]"; 
                                 }
@@ -133,7 +114,6 @@ final class data_base_query{
                                          mysqli_close($this->link_open);
                                          return 0 ;
                                   }
-
                          }
                          else{
                                         mysqli_close($this->link_open);
@@ -145,19 +125,13 @@ final class data_base_query{
                          return 0;
                     }
           }
-
-
-           function search_value(){
-
+          function search_value(){
                    $arg_num = func_num_args();
                    $arguments = func_get_args();
-
                      if($arg_num > 4){
-
                                if(!data_base_query::db_conn($arguments[0])){
                                         return 0;
                                 }
-
                                $Q = "SELECT ";
                                $x = 2;
                                while($x < $arg_num-2){
@@ -170,9 +144,7 @@ final class data_base_query{
                                      }
                                     $x++;
                                }
-
                               $Q = $Q." FROM ". $arguments[1] . " WHERE ". $arguments[$x] ." LIKE  '". $arguments[++$x]."'";
-
                               if($runquery = mysqli_query($this->link_open,$Q)){
                                      if(mysqli_num_rows($runquery) > 0){
                                          $result = array();
@@ -207,25 +179,17 @@ final class data_base_query{
                              return 0;
                      }
              }
-
       function update_value(){
-
             $arg_num = func_num_args();
             $arguments = func_get_args();
-
             if($arg_num >=6 && $arg_num%2 == 0){
-                 
                     $arg_num = $arg_num-4;
-
                     if(!data_base_query::db_conn($arguments[0])){
                             return 0;
                      }
-
                     $Q = "UPDATE $arguments[1] SET ";
                     $x = 2;
-
                     while($x < $arg_num+2){
-                      
                          if($x == 2){
                                   $Q = $Q." ".$arguments[$x] ." = '". $arguments[++$x]."' ";
                           }
@@ -234,16 +198,13 @@ final class data_base_query{
                           }
                           $x++;
                      }
-
                     $Q = $Q." WHERE ". $arguments[$x];
-
                     if($arguments[++$x] == "NULL"){
                         $Q = $Q." IS ".$arguments[$x];
                     }
                     else{
                         $Q = $Q." = '".$arguments[$x]."'";
                     }
-
                    if($runquery = mysqli_query($this->link_open,$Q)){
                          if($result = mysqli_affected_rows($this->link_open)){               
                                mysqli_close($this->link_open);
@@ -264,25 +225,17 @@ final class data_base_query{
                     return 0;
             }
  }
-
  function d_update_value(){
-
             $arg_num = func_num_args();
             $arguments = func_get_args();
-
             if($arg_num >=8 && $arg_num%2 == 0){
-                    
                     $arg_num = $arg_num-6;
-                    
                     if(!data_base_query::db_conn($arguments[0])){
                             return 0;
                      }
-
                     $Q = "UPDATE $arguments[1] SET ";
                     $x = 2;
-
                     while($x < $arg_num+2){
-                       
                          if($x == 2){
                                   $Q = $Q." ".$arguments[$x] ." = '". $arguments[++$x]."' ";
                           }
@@ -291,9 +244,7 @@ final class data_base_query{
                           }
                           $x++;
                      }
-
                     $Q = $Q."  WHERE ". $arguments[$x];
-
                      if($arguments[++$x] == "NULL"){
                               $Q = $Q." IS ".$arguments[$x]." AND ".$arguments[++$x];
                      }
@@ -306,7 +257,6 @@ final class data_base_query{
                      else{
                               $Q = $Q." = '".$arguments[$x];
                      }
-
                    if($runquery = mysqli_query($this->link_open,$Q)){
                         if($result = mysqli_affected_rows($this->link_open)){               
                                mysqli_close($this->link_open);
@@ -327,12 +277,9 @@ final class data_base_query{
                     return 0;
              }
  }
-
  function return_value(){
-
          $arg_num = func_num_args();
          $arguments = func_get_args();
-
          if($arg_num > 2){
              if(!data_base_query::db_conn($arguments[0])){
                         return 0;
@@ -383,9 +330,7 @@ final class data_base_query{
                return 0;
           }
  }
-
  function return_match_value(){
-
        $arg_num = func_num_args();
         $arguments = func_get_args();
          if($arg_num > 4){
@@ -445,9 +390,7 @@ final class data_base_query{
              return 0;
         }
  }
-
  function return_d_match_value(){
-
        $arg_num = func_num_args();
         $arguments = func_get_args();
          if($arg_num > 6){
@@ -514,21 +457,14 @@ final class data_base_query{
           return 0;
         }
  } 
-
-
  function drop_table(){
-
            $args_num = func_num_args();
            $arguments = func_get_args();
-
            if($args_num == 2){
-
                   if(!data_base_query::db_conn($arguments[0])){
                         return 0;
                   }
-
                   $Q = "DROP TABLE $arguments[1]";
-
                   if(mysqli_query($this->link_open,$Q)){
                         mysqli_close($this->link_open);
                         return 1;
@@ -543,20 +479,14 @@ final class data_base_query{
                     return 0;
            }
  }
-     
   function add_field(){
-
            $args_num = func_num_args();
            $arguments = func_get_args();
-
-           if($args_num > 3){
+           if($args_num == 4){
                if(!data_base_query::db_conn($arguments[0])){
                         return 0;
                }
-              
               $Q = "ALTER TABLE $arguments[1] ADD $arguments[2] $arguments[3]";
-              echo"$Q";
-
               if(mysqli_query($this->link_open,$Q)){
                    mysqli_close($this->link_open);
                    return 1;
@@ -571,23 +501,16 @@ final class data_base_query{
                   return 0;
            }
   }
-
   function remove_field(){
-
             $args_num = func_num_args();
             $arguments = func_get_args();
-
             if($args_num > 2){
-  
                    if(!data_base_query::db_conn($arguments[0])){
                           return 0;
                    }
-
                    $Q = "ALTER TABLE $arguments[1] DROP ";
-
                    $x = 2;
                    while($x < $args_num){
- 
                           if($x == 2){       
                                     $Q = $Q.$arguments[$x];
                           }
@@ -596,7 +519,6 @@ final class data_base_query{
                           }
                           $x++;
                    }
-
                    if(mysqli_query($this->link_open,$Q)){
                                   mysqli_close($this->link_open);
                                   return 1;
@@ -611,22 +533,16 @@ final class data_base_query{
                   return 0;
             }
   }
-     
-     function select_query(){
-              
+     function select_query(){           
             $args_num = func_num_args();
             $arguments = func_get_args();
-
             if($args_num > 3){
-
                  if(!data_base_query::db_conn($arguments[0])){
                           return 0;
                    }
-                
                   $Q = "SELECT ";  
                    $x = 2;
-                   while($x < $args_num-1){
-                       
+                   while($x < $args_num-1){   
                        if($x == 2){
                             $Q = $Q.$arguments[$x];
                        }
@@ -636,7 +552,6 @@ final class data_base_query{
                        $x++;
                    }
                    $Q = $Q." FROM ".$arguments[1]." WHERE ".$arguments[$x];
-                 
                    if($runquery = mysqli_query($this->link_open,$Q)){
                         if(mysqli_num_rows($runquery) >= 1){
                               $result = array();
@@ -667,6 +582,50 @@ final class data_base_query{
                    }
             }
             else{ 
+                  echo"<br>check number of arguments<br>";
+                  return 0;
+            }
+  }
+    function change_field(){
+            $args_num = func_num_args();
+            $arguments = func_get_args();
+            if($args_num = 2){
+                   if(!data_base_query::db_conn($arguments[0])){
+                          return 0;
+                   }
+                   $Q = "ALTER TABLE $arguments[1] CHANGE $arguments[2] $arguments[3] $arguments[4]";
+                   if(mysqli_query($this->link_open,$Q)){
+                                  mysqli_close($this->link_open);
+                                  return 1;
+                   }
+                   else{
+                            mysqli_close($this->link_open);
+                            return 0;
+                   }
+            }
+            else{
+                  echo"<br>check number of arguments<br>";
+                  return 0;
+            }
+  }
+  function rename_table(){
+            $args_num = func_num_args();
+            $arguments = func_get_args();
+            if($args_num = 3){
+                   if(!data_base_query::db_conn($arguments[0])){
+                          return 0;
+                   }
+                   $Q = "ALTER TABLE $arguments[1] RENAME TO $arguments[2] ";
+                   if(mysqli_query($this->link_open,$Q)){
+                                  mysqli_close($this->link_open);
+                                  return 1;
+                   }
+                   else{
+                            mysqli_close($this->link_open);
+                            return 0;
+                   }
+            }
+            else{
                   echo"<br>check number of arguments<br>";
                   return 0;
             }
