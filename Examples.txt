@@ -1,3 +1,9 @@
+                                                    Example Programs
+                                                   
+                                                   
+                                                   
+                                                   
+
 create object called $conn
 
 $conn = new data_base_query("localhost","root","password");
@@ -10,7 +16,8 @@ $conn = new data_base_query("localhost","root","password");
 
 To Insert value
 
-if($conn->insert_value("database_name","table_name","name","email","mobile","xyz","xyz@email.domain","12345")){
+
+if($conn->insert_value("database_name","table_name","name","email","mobile","name_xyz","xyz@email.domain","12345")){
 
    echo"value inserted";
 
@@ -256,7 +263,7 @@ else{
 condition based
 
 
-if($x = $conn->search_value("database_name","table_name","email","id > 23 AND id < 53")){
+if($x = $conn->search_value("database_name","table_name","email"," WHERE id > 23 AND id < 53")){
 
            foreach($x as $value){
                 echo"$value<br />";
@@ -267,13 +274,12 @@ else{
 }
 
 
-id > 23 AND id < 53 is a condition 
-
-condtion is a statement which we use after WHERE in sql statement
+WHERE id > 23 AND id < 53      is a condition here
 
 it could be any sql command used to filter result like
 
 name GROUP BY asc 
 
-country IN('India','japan')
+WHERE country IN('India','japan')
+
 
