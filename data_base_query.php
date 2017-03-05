@@ -551,7 +551,7 @@ final class data_base_query{
                        }
                        $x++;
                    }
-                   $Q = $Q." FROM ".$arguments[1]." WHERE ".$arguments[$x];
+                   $Q = $Q." FROM ".$arguments[1]." ".$arguments[$x];
                    if($runquery = mysqli_query($this->link_open,$Q)){
                         if(mysqli_num_rows($runquery) >= 1){
                               $result = array();
