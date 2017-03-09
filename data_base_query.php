@@ -617,18 +617,5 @@ final class data_base_query{
                  return 0;
          }
   }
-}  //class ends 
-
-$object = new data_base_query('localhost','root','');
-
-
-/*
-if($object->insert('data','tac','first','email','home','karan','karansharma@gmail.com','alighar')){
-       echo"inserted";
-}
-else{
-       echo"error";
-}
-*/
-
+}  
 ?>
