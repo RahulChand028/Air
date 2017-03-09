@@ -38,8 +38,7 @@ final class data_base_query{
                               while($x < ($arg_num-2)/2+2){
                                     if($x == 2){
                                            $Q = $Q.$arguments[$x];
-                                    }
-                                    else{
+                                    }else{
                                            $Q = $Q." , ".$arguments[$x];
                                     }
                                     $x++;
@@ -48,8 +47,7 @@ final class data_base_query{
                              while($x < $arg_num){
                                     if($x == ($arg_num-2)/2+2){
                                            $Q = $Q."'".$arguments[$x]."'";
-                                    }
-                                    else{
+                                    }else{
                                            $Q = $Q.",'".$arguments[$x]."'";
                                     }
                                     $x++;
@@ -59,18 +57,15 @@ final class data_base_query{
                                     if(mysqli_affected_rows($this->link_open) > 0){              
                                            mysqli_close($this->link_open);
                                            return 1;
-                                     }
-                                     else{
+                                     }else{
                                             mysqli_close($this->link_open);
                                             return 0;
                                      }
-                              }
-                              else{
+                              }else{
                                           mysqli_close($this->link_open);      
                                           return 0;
                               }
-                       }
-                       else{
+                       }else{
                               echo"<br>check number of arguments<br>";
                               return 0;
                        }
@@ -85,8 +80,7 @@ final class data_base_query{
                          if($arg_num == 4){
                                if($arguments[3] == "NULL"){
                                          $Q = "DELETE FROM $arguments[1] WHERE $arguments[2] IS $arguments[3]"; 
-                                }
-                                else{
+                                }else{
                                          $Q = "DELETE FROM $arguments[1] WHERE $arguments[2] = '$arguments[3]'"; 
                                 }
                          }
@@ -94,14 +88,12 @@ final class data_base_query{
                                 $Q = "DELETE FROM $arguments[1] WHERE $arguments[2] ";
                                 if($arguments[3] == "NULL"){
                                          $Q = $Q." IS ".$arguments[3]." AND $arguments[4]";
-                                }
-                                else{
+                                }else{
                                          $Q = $Q." = '".$arguments[3]."' AND $arguments[4]";
                                 }
                                 if($arguments[5] == "NULL"){
                                          $Q = $Q." IS ".$arguments[5];
-                                }
-                                else{
+                                }else{
                                          $Q = $Q." = '".$arguments[5]."'";
                                 }
                          }
@@ -109,18 +101,15 @@ final class data_base_query{
                                   if($result = mysqli_affected_rows($this->link_open)){  
                                         mysqli_close($this->link_open);
                                         return $result;
-                                  }
-                                  else{
+                                  }else{
                                          mysqli_close($this->link_open);
                                          return 0 ;
                                   }
-                         }
-                         else{
+                         }else{
                                         mysqli_close($this->link_open);
                                         return 0;
                          } 
-                    }
-                    else{
+                    }else{
                          echo"<br>Check number of arguments<br>";
                          return 0;
                     }
@@ -138,8 +127,7 @@ final class data_base_query{
 
                                     if($x == 2){
                                          $Q = $Q.$arguments[$x];
-                                   }
-                                    else{
+                                   }else{
                                          $Q = $Q." , ".$arguments[$x];
                                      }
                                     $x++;
@@ -151,8 +139,7 @@ final class data_base_query{
                                          while($data = mysqli_fetch_array($runquery)){
                                                if($arg_num == 5){
                                                     $result[] =  $data[$arguments[2]];
-                                                }
-                                               else if($arg_num > 3){
+                                                }else if($arg_num > 3){
                                                     $x = 2;
                                                     while($x < $arg_num-2){
                                                         $result[$x-2][] = $data[$arguments[$x]];
@@ -162,19 +149,16 @@ final class data_base_query{
                                           }
                                           mysqli_close($this->link_open);
                                           return $result;
-                                     }
-                                     else{
+                                     }else{
                                           mysqli_close($this->link_open);
                                           return 0 ;
                                       }
-                              }
-                              else{
+                              }else{
                                        echo"<br> make sure your arguments once again<br>";
                                        mysqli_close($this->link_open);
                                        return 0 ;
                                }
-                     }
-                     else{
+                     }else{
                              echo"check number of arguments";
                              return 0;
                      }
@@ -192,8 +176,7 @@ final class data_base_query{
                     while($x < $arg_num+2){
                          if($x == 2){
                                   $Q = $Q." ".$arguments[$x] ." = '". $arguments[++$x]."' ";
-                          }
-                         else{
+                          }else{
                                   $Q = $Q." , ".$arguments[$x] ." = '". $arguments[++$x]."'  ";
                           }
                           $x++;
@@ -201,26 +184,22 @@ final class data_base_query{
                     $Q = $Q." WHERE ". $arguments[$x];
                     if($arguments[++$x] == "NULL"){
                         $Q = $Q." IS ".$arguments[$x];
-                    }
-                    else{
+                    }else{
                         $Q = $Q." = '".$arguments[$x]."'";
                     }
                    if($runquery = mysqli_query($this->link_open,$Q)){
                          if($result = mysqli_affected_rows($this->link_open)){               
                                mysqli_close($this->link_open);
                                return $result;
-                          }
-                          else{
+                          }else{
                                mysqli_close($this->link_open);
                                return 0;
                           }
-                    }
-                   else{
+                    }else{
                             mysqli_close($this->link_open);      
                             return 0;
                     }
-             }
-            else{
+             }else{
                     echo"check number of arguments";
                     return 0;
             }
@@ -238,8 +217,7 @@ final class data_base_query{
                     while($x < $arg_num+2){
                          if($x == 2){
                                   $Q = $Q." ".$arguments[$x] ." = '". $arguments[++$x]."' ";
-                          }
-                         else{
+                          }else{
                                   $Q = $Q." , ".$arguments[$x] ." = '". $arguments[++$x]."'  ";
                           }
                           $x++;
@@ -247,32 +225,27 @@ final class data_base_query{
                     $Q = $Q."  WHERE ". $arguments[$x];
                      if($arguments[++$x] == "NULL"){
                               $Q = $Q." IS ".$arguments[$x]." AND ".$arguments[++$x];
-                     }
-                     else{
+                     }else{
                               $Q = $Q." = '".$arguments[$x]." AND ".$arguments[++$x];
                      }
                      if($arguments[++$x] == "NULL"){
                               $Q = $Q." IS ".$arguments[$x];
-                     }
-                     else{
+                     }else{
                               $Q = $Q." = '".$arguments[$x];
                      }
                    if($runquery = mysqli_query($this->link_open,$Q)){
                         if($result = mysqli_affected_rows($this->link_open)){               
                                mysqli_close($this->link_open);
                                return $result;
-                        }
-                        else{
+                        }else{
                                mysqli_close($this->link_open);
                                return 0;
                         }
-                    }
-                   else{
+                    }else{
                             mysqli_close($this->link_open);      
                             return 0;
                     }
-             }
-              else{
+             }else{
                     echo"check number of arguments";
                     return 0;
              }
@@ -289,8 +262,7 @@ final class data_base_query{
                while($x < $arg_num){
                     if($x == 2){
                          $Q = $Q." ".$arguments[$x];
-                     }
-                    else{
+                     }else{
                          $Q = $Q." , ".$arguments[$x];
                     }
                     $x++;
@@ -302,8 +274,7 @@ final class data_base_query{
                            while($data = mysqli_fetch_array($runquery)){
                                 if($arg_num == 3){
                                      $result[] =  $data[$arguments[2]];
-                                 }
-                                 else if($arg_num > 3){
+                                 }else if($arg_num > 3){
                                      $x = 2;
                                      while($x < $arg_num){
                                          $result[$x-2][] = $data[$arguments[$x]];
@@ -313,19 +284,16 @@ final class data_base_query{
                             }
                             mysqli_close($this->link_open);
                             return $result;
-                     }
-                    else{
+                     }else{
                             mysqli_close($this->link_open);
                             return 0 ;
                      }
-                }
-                else{
+                }else{
                             echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
                             return 0 ;
                 }
-           }
-          else{
+           }else{
                echo "<br>check number of arguments</br>";
                return 0;
           }
@@ -342,8 +310,7 @@ final class data_base_query{
                while($x < $arg_num-2){
                     if($x == 2){
                          $Q = $Q." ".$arguments[$x];
-                     }
-                    else{
+                     }else{
                          $Q = $Q." , ".$arguments[$x];
                     }
                     $x++;
@@ -351,8 +318,7 @@ final class data_base_query{
                $Q = $Q." FROM ".$arguments[1]." WHERE ".$arguments[$x];
                 if($arguments[++$x] == "NULL"){
                   $Q = $Q." IS ".$arguments[$x];
-                }
-                else{
+                }else{
                   $Q = $Q." = '".$arguments[$x]."'";
                 }
               
@@ -362,8 +328,7 @@ final class data_base_query{
                            while($data = mysqli_fetch_array($runquery)){
                                 if($arg_num == 5){
                                      $result[] =  $data[$arguments[2]];
-                                 }
-                                 else {
+                                 }else {
                                      $x = 2;
                                      while($x < $arg_num-2){
                                          $result[$x-2][] = $data[$arguments[$x]];
@@ -373,19 +338,16 @@ final class data_base_query{
                             }
                             mysqli_close($this->link_open);
                             return $result;
-                     }
-                    else{
+                     }else{
                             mysqli_close($this->link_open);
                             return 0 ;
                      }
-                }
-                else{
+                }else{
                             echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
                             return 0 ;
                 }
-        }
-        else{
+        }else{
             echo"<br>check number of arguments<br>";
              return 0;
         }
@@ -402,8 +364,7 @@ final class data_base_query{
                while($x < $arg_num-4){
                     if($x == 2){
                          $Q = $Q." ".$arguments[$x];
-                     }
-                    else{
+                     }else{
                          $Q = $Q." , ".$arguments[$x];
                     }
                     $x++;
@@ -412,14 +373,12 @@ final class data_base_query{
 
                if($arguments[++$x] == "NULL"){
                     $Q = $Q." IS ".$arguments[$x]." AND ". $arguments[++$x];
-               }
-               else{
+               }else{
                     $Q = $Q." ='".$arguments[$x]."' AND ".$arguments[++$x];
                }
                if($arguments[++$x] == "NULL"){
                     $Q = $Q." IS ".$arguments[$x];
-               }
-               else{
+               }else{
                     $Q = $Q." = '".$arguments[$x]."'";
                }
 
@@ -429,8 +388,7 @@ final class data_base_query{
                            while($data = mysqli_fetch_array($runquery)){
                                 if($arg_num == 7){
                                      $result[] =  $data[$arguments[2]];
-                                 }
-                                 else{
+                                 }else{
                                      $x = 2;
                                      while($x < $arg_num-4){
                                          $result[$x-2][] = $data[$arguments[$x]];
@@ -440,19 +398,16 @@ final class data_base_query{
                             }
                             mysqli_close($this->link_open);
                             return $result;
-                     }
-                    else{
+                     }else{
                             mysqli_close($this->link_open);
                             return 0 ;
                      }
-                }
-                else{
+                }else{
                             echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
                             return 0 ;
                 }
-        }
-        else{
+        }else{
           echo"<br>check number of arguments<br>";
           return 0;
         }
@@ -468,13 +423,11 @@ final class data_base_query{
                   if(mysqli_query($this->link_open,$Q)){
                         mysqli_close($this->link_open);
                         return 1;
-                  }
-                  else{
+                  }else{
                         mysqli_close($this->link_open);
                         return 0;
                   }
-           }
-           else{
+           }else{
                     mysqli_close($this->link_open);
                     return 0;
            }
@@ -490,13 +443,11 @@ final class data_base_query{
               if(mysqli_query($this->link_open,$Q)){
                    mysqli_close($this->link_open);
                    return 1;
-              }
-              else{
+              }else{
                    mysqli_close($this->link_open);
                    return 0;
               }
-           }
-           else{
+           }else{
                   echo"<br>check number of arguments<br>";
                   return 0;
            }
@@ -513,8 +464,7 @@ final class data_base_query{
                    while($x < $args_num){
                           if($x == 2){       
                                     $Q = $Q.$arguments[$x];
-                          }
-                          else{
+                          }else{
                                     $Q = $Q.", DROP ".$arguments[$x];
                           }
                           $x++;
@@ -522,13 +472,11 @@ final class data_base_query{
                    if(mysqli_query($this->link_open,$Q)){
                                   mysqli_close($this->link_open);
                                   return 1;
-                   }
-                   else{
+                   }else{
                             mysqli_close($this->link_open);
                             return 0;
                    }
-            }
-            else{
+            }else{
                   echo"<br>check number of arguments<br>";
                   return 0;
             }
@@ -545,8 +493,7 @@ final class data_base_query{
                    while($x < $args_num-1){   
                        if($x == 2){
                             $Q = $Q.$arguments[$x];
-                       }
-                       else{
+                       }else{
                             $Q = $Q.",".$arguments[$x];
                        }
                        $x++;
@@ -558,8 +505,7 @@ final class data_base_query{
                               while($data = mysqli_fetch_array($runquery)){
                                    if($args_num == 4){
                                          $result[] =  $data[$arguments[2]];
-                                    } 
-                                   else {
+                                    }  else {
                                          $x = 2;
                                          while($x < $args_num-1){
                                               $result[$x-2][] = $data[$arguments[$x]];
@@ -569,19 +515,16 @@ final class data_base_query{
                               }
                             mysqli_close($this->link_open);
                             return $result;
-                        }
-                       else{
+                        }else{
                             mysqli_close($this->link_open);
                             return 0 ;
                          }
-                    }
-                   else{
+                    }else{
                             echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
                             return 0 ;
                    }
-            }
-            else{ 
+            }else{ 
                   echo"<br>check number of arguments<br>";
                   return 0;
             }
@@ -597,13 +540,11 @@ final class data_base_query{
                    if(mysqli_query($this->link_open,$Q)){
                                   mysqli_close($this->link_open);
                                   return 1;
-                   }
-                   else{
+                   }else{
                             mysqli_close($this->link_open);
                             return 0;
                    }
-            }
-            else{
+            }else{
                   echo"<br>check number of arguments<br>";
                   return 0;
             }
@@ -619,18 +560,63 @@ final class data_base_query{
                    if(mysqli_query($this->link_open,$Q)){
                                   mysqli_close($this->link_open);
                                   return 1;
-                   }
-                   else{
+                   }else{
                             mysqli_close($this->link_open);
                             return 0;
                    }
-            }
-            else{
+            }else{
                   echo"<br>check number of arguments<br>";
                   return 0;
             }
   }
-
+     function join_select(){
+          $args_num = func_num_args();
+          $arguments = func_get_args();
+          if($args_num > 2){
+                  if(!data_base_query::db_conn($arguments[0])){
+                        return 0;
+                   }
+                  $Q = "SELECT ";
+                  $x = 1;
+                  while($x < $args_num-1){
+                      if($x == 1){
+                           $Q = $Q.$arguments[$x];
+                      }else{
+                           $Q = $Q.",".$arguments[$x];
+                      }
+                      $x++;
+                  }
+                  $Q = $Q." ".$arguments[$x];
+                 if($runquery = mysqli_query($this->link_open,$Q)){
+                      if(mysqli_num_rows($runquery) >= 1){
+                           $result = array();
+                           while($data = mysqli_fetch_array($runquery)){
+                               if($args_num == 3){
+                                   $result[] =  $data[$arguments[2]];
+                                }else {
+                                    $x = 1;
+                                     while($x < $args_num-1){
+                                         $result[$x-1][] = $data[$arguments[$x]];
+                                         $x++;
+                                      }
+                                }
+                            }
+                            mysqli_close($this->link_open);
+                             return $result;
+                        }else{
+                           mysqli_close($this->link_open);
+                           return 0 ;
+                        }
+                  }else{
+                       echo"<br> make sure your arguments once again<br>";
+                       mysqli_close($this->link_open);
+                       return 0 ;
+                 }
+          }else{
+                 echo"<br>check number of arguments<br>";
+                 return 0;
+         }
+  }
 }  //class ends 
 
 $object = new data_base_query('localhost','root','');
