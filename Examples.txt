@@ -283,3 +283,17 @@ name GROUP BY asc
 WHERE country IN('India','japan')
 
 
+
+
+join Query
+
+
+if($x = $object->join_select("database","select_field","select_field","FROM table_1 a , table_2 b WHERE a.id = b.id")){
+       print_r($x);
+}
+else{
+       echo"error";
+}
+select filed could be of any numbers
+
+
