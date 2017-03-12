@@ -122,5 +122,19 @@ final class file_operation{
                         return $result;
                   }
             }
+            public function validate_email($email){
+                if(filter_var($email,FILTER_VALIDATE_EMAIL)){
+                   return 1;
+                }else{
+                   return 0;
+                }
+            }
+             public function validate_url($url){
+                 if(preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$url)){
+                      return 1;
+                 }else{
+                      return 0;
+                 }
+            }
 }
 ?>
