@@ -122,6 +122,27 @@ final class file_operation{
                         return $result;
                   }
             }
+            public function read_comment_file($file_name){
+               if(!file_exists($file_name) || !is_readable($file_name)){
+                     return 0;
+               }else{
+                     $result = array();
+                     $file_open = fopen("$file_name","r");
+                     flock($file_open,LOCK_SH);
+                            $num = fgets($file_open);
+                            $index = 0;
+                            do{
+                                   $start = 0;
+                                   while(++$start < $num+1 && $content = fgets($file_open)){
+                                           $result[$index][] = $content;
+                                    }
+                                    $num = fgets($file_open);
+                            }while($num && ++$index);
+                    flock($file_open,LOCK_UN);
+                    fclose($file_open);
+                    return $result;
+                 }
+             }
             public function validate_email($email){
                 if(filter_var($email,FILTER_VALIDATE_EMAIL)){
                    return 1;
