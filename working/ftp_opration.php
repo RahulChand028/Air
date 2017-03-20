@@ -151,6 +151,46 @@
                     return 0;
                   }
           }
+           function ftp_rawlist($dir_name){
+                  $conn = ftp_server::ftp_connection_start();
+                  if(!$conn){
+                        return 0;
+                  }
+                  $result = [];
+                  $result = ftp_rawlist($this->ftp_connection,"$dir_name");
+                  ftp_close($this->ftp_connection);
+                  if($result){
+                    return $result;
+                  }else{
+                    return 0;
+                  }
+          }
+           function ftp_pwd($dir_name){
+                  $conn = ftp_server::ftp_connection_start();
+                  if(!$conn){
+                        return 0;
+                  }
+                  $result = ftp_pwd($this->ftp_connection);
+                  ftp_close($this->ftp_connection);
+                  if($result){
+                    return $result;
+                  }else{
+                    return 0;
+                  }
+          }
+           function ftp_chdir($dir_name){
+                  $conn = ftp_server::ftp_connection_start();
+                  if(!$conn){
+                        return 0;
+                  }
+                  $result = ftp_chdir($this->ftp_connection,"$dir_name");
+                  ftp_close($this->ftp_connection);
+                  if($result){
+                    return 1;
+                  }else{
+                    return 0;
+                  }
+          }
   }
 
 //   $ftp_ob = new ftp_server("localhost","chand","chandpass");
