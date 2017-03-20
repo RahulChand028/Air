@@ -112,12 +112,12 @@
                     return 0;
                   }
           }
-          function ftp_rename($dir_name){
+          function ftp_rename($old_file,$new_file){
                   $conn = ftp_server::ftp_connection_start();
                   if(!$conn){
                         return 0;
                   }
-                  $result = ftp_rmdir($this->ftp_connection,"$dir_name");
+                  $result = ftp_rename($this->ftp_connection,"$old_file","$new_file");
                   ftp_close($this->ftp_connection);
                   if($result){
                     return 1;
