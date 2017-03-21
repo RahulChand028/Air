@@ -1,4 +1,5 @@
 <?php
+namespace Air;
 final class data_base_query{
 
      private $link_open;
