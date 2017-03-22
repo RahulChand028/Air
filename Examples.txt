@@ -2,11 +2,11 @@
                                                    
                                                    
                                                    
-                                                   
+                                                 
 
 create object called $conn
 
-$conn = new Air/data_base_query("localhost","root","password");
+$conn = new Air/database/data_base_query("localhost","root","password");
 
 
 
