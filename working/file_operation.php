@@ -1,5 +1,7 @@
 <?php
 
+namespace Air/file_operation;
+
 final class file_operation{
 
     public function read_line(){
