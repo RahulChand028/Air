@@ -1,0 +1,299 @@
+                                                    Example Programs
+                                                   
+                                                   
+                                                   
+                                                 
+
+create object called $conn
+
+$conn = new Air/database/data_base_query("localhost","root","password");
+
+
+
+
+
+
+
+To Insert value
+
+
+if($conn->insert_value("database_name","table_name","name","email","mobile","name_xyz","xyz@email.domain","12345")){
+
+   echo"value inserted";
+
+}
+else{
+    echo"value could not be inserted";
+}
+
+
+
+
+
+
+
+
+TO retrive value
+
+if($x = $conn->return_value("database","table_value","name")){
+ 
+      foreach($x as $value){
+           echo"$value<br />";
+      }
+}
+else{
+
+     echo"nothing is there";
+}
+
+it will return one dimensional array contain all names in an array 
+because only name is being retriving if more field is being retrived then two dimensional array will be retrived 
+
+
+
+
+
+
+
+
+
+Retrive value with one match   
+
+if($x = $conn->return_match_value("database","table_value","name","email","xyz@email.domain")){
+ 
+      foreach($x as $value){
+           echo"$value<br />";
+      }
+}
+else{
+
+     echo"nothing is there";
+}
+
+
+it will give all the name in one dimensional array where email is xyz@email.domain
+two or more field can be retrive in two dimensional array
+
+
+
+
+
+
+
+
+Retrive value with two match   
+
+if($x = $conn->return_d_match_value("database","table_value","name","email","xyz@email.domain","id","345")){
+ 
+      foreach($x as $value){
+           echo"$value<br />";
+      }
+}
+else{
+
+     echo"nothing is there";
+}
+
+
+it will give all the name where email is xyz@email.domain and id is 345
+two or more field can be retrive in two dimensional array
+
+
+
+
+
+
+
+
+
+To update value with one match
+
+
+if($conn->update_value("database_name","table_name","name","abc","email","xyz@email.domain")){
+   echo"data updated";
+}
+else{
+   echo"nothing update ";
+}
+
+it will update name to abc where email is xyz@email.domain
+
+
+
+
+
+
+
+
+
+
+To upadte value with two match
+
+if($conn->d_update_value("database_name","table_name","name","abc","email","xyz@email.domain","mobile","7484")){
+   echo"data updated";
+}
+else{
+   echo"nothing update ";
+}
+
+it will update name to abc where email is xyz@email.domain and mobile is 7484
+
+
+
+
+
+
+
+
+
+
+
+
+To delete values
+
+if($conn->delete("database_name","table_name","email","xyz@email.domain")){
+   echo"data deleted";
+}
+else{
+   echo"nothing deleted ";
+}
+
+it will delete data whose email is xyz@email.domain
+
+
+
+
+
+
+
+
+if($conn->delete("database_name","table_name","name","abc","email","xyz@email.domain")){
+   echo"data delete";
+}
+else{
+   echo"nothing delete ";
+}
+
+it will dalete data whose name is abc and email is xyz@email.domain
+
+
+
+
+
+
+
+
+
+To Search value 
+
+
+if($x = $conn->search_value("database_name","table_name","email","name","'a%'")){
+
+           foreach($x as $value){
+                echo"$value<br />";
+           }
+}
+else{
+   echo"nothing retrive ";
+}
+
+it will retreve all the email in one dimensional where name starts with a
+two or more field can be retrive in two dimensional array
+
+
+
+
+
+
+
+
+
+
+to Drop table
+
+if($x = $conn->drop_table("database_name","table_name")){
+
+        echo"table droped";
+}
+else{
+   echo"nothing retrive ";
+}
+
+
+
+
+
+
+
+
+
+To add new field 
+
+
+if($x = $conn->add_field("database_name","table_name","email","varchar(20)")){
+
+         echo"new field added";
+}
+else{
+   echo" failed to add new field ";
+}
+
+
+
+
+
+
+
+
+if($conn->remove_field("database_name","table_name","email")){
+
+        echo"field remove";
+}
+else{
+   echo" error ";
+}
+
+
+
+
+
+
+
+
+condition based
+
+
+if($x = $conn->search_value("database_name","table_name","email"," WHERE id > 23 AND id < 53")){
+
+           foreach($x as $value){
+                echo"$value<br />";
+           }
+}
+else{
+   echo"nothing retrive ";
+}
+
+
+WHERE id > 23 AND id < 53      is a condition here
+
+it could be any sql command used to filter result like
+
+name GROUP BY asc 
+
+WHERE country IN('India','japan')
+
+
+
+
+join Query
+
+
+if($x = $object->join_select("database","select_field","select_field","FROM table_1 a , table_2 b WHERE a.id = b.id")){
+       print_r($x);
+}
+else{
+       echo"error";
+}
+select filed could be of any numbers
+
+
