@@ -1,0 +1,106 @@
+
+Create an object let say $conection 
+
+$conection = new ftp_server("server","username","password");
+
+
+to get list of files in directory
+
+if($list = $conection->ftp_nlist("directory_name")){
+         print_r($list);
+}
+
+
+to get file
+
+if($conection->ftp_get("local_file","remote_file")){
+        echo"file transfred";
+}
+
+
+
+to put file
+
+if($conection->ftp_put("local_file","remote_file")){
+        echo"file transfred";
+}
+
+
+
+to delete file
+
+if($conection->ftp_delete("$file_name")){
+        echo"file deleted";
+}
+
+
+
+
+to make dir
+
+if($conection->ftp_mkdir("directory")){
+        echo"directory created";
+}
+
+
+
+
+
+to remove dir
+
+if($conection->ftp_rmdir("directory")){
+        echo"remove directory";
+}
+
+
+
+to get last modification time
+
+if($time = $conection->ftp_mdtm("file")){
+        echo" last modification time is $time";
+}
+
+
+
+
+to rename file
+
+if($conection->ftp_rename("old_name","new_name")){
+        echo"rename done";
+}
+
+
+
+
+to get file size
+
+if($size = $conection->ftp_size("local_file","remote_file")){
+        echo"$size";
+}
+
+
+
+
+to change fiie permission
+
+if($conection->ftp_chmod("file","permission")){
+        echo"file transfred";
+}
+
+
+
+
+to get current directory
+
+if($dir = $conection->ftp_pwd("local_file","remote_file")){
+        echo"$dir";
+}
+
+
+
+
+to change current directory
+
+if($conection->ftp_chdir("directory_name")){
+        echo"directory changed";
+}
