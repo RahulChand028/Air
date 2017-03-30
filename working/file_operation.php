@@ -14,13 +14,23 @@ final class file_operation{
                     $file_open = fopen("$arguments[0]","r");
                        flock($file_open,LOCK_SH);
                        if($num_args == 2){
+                             if(!is_int($arguments[1])){
+                                   flock($file_open,LOCK_UN);
+                                   fclose($file_open);                                 
+                                   return 0; 
+                             }
                               while($content = fgets($file_open)){
                                     if(++$x == $arguments[1]){
                                          $result = $content;
                                          break;
                                      }
                                }
-                      }else if($num_args == 3){
+                        }else if($num_args == 3){
+                              if(!is_int($arguments[1]) || !is_int($arguments[2])){
+                                   flock($file_open,LOCK_UN);
+                                   fclose($file_open);                                 
+                                   return 0; 
+                              }
                                $result = array();
                                while($content = fgets($file_open)){
                                      if(++$x == $arguments[1]){
@@ -33,7 +43,7 @@ final class file_operation{
                                           break;
                                       }
                                }
-                      }
+                        }
                       flock($file_open,LOCK_UN);
                       fclose($file_open);
                       return $result;
