@@ -50,12 +50,20 @@ final class file_operation{
                 }
         }
 
-      public function write_post($file_name,$identity,$post){
-                   $date = date("h")." : ".date("i").date("A")."  ".date("j")."-".date("M")."-".date("Y");
-                   $post_array = explode("\n","trim($post)");
-                   $num = count($post_array)+2;
-                   $data = $num."\n".$identity."\n".$date."\n".$post;
-                   if($file_open = fopen("$file_name","w")){
+      public function write_post(){
+                   $arguments = func_get_args();
+                   $arg_nums = func_num_args();
+       
+                   $post_array = explode("\n","trim($arguments[1])");
+                   $num = count($post_array)+$arg_num-2;
+                   $data = $num;
+                   if($arg_nums > 2){
+                       for($loop = 2;$loop < $arg_nums;$loop++){
+                           $data = $data."\n".$arguments[$loop];
+                       }
+                   }
+                   $data = $data."\n".$post;
+                   if($file_open = fopen("$arguments[0]","w")){
                         flock($file_open,LOCK_SH);
                              fwrite($file_open,$data);
                         flock($file_open,LOCK_UN);
