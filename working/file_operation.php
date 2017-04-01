@@ -91,28 +91,29 @@ final class file_operation{
                      return $result;
                }
         }
-      public function write_comment(){
+        public function write_comment(){
                $arguments = func_get_args();
                $arg_nums = func_num_args();
           
-               if(!file_exists($file_name) || !is_readable($file_name)){
+               if(!file_exists($arguments[0]) || !is_readable($arguments[0])){
                      return 0;
                }
           
-               $comment_array = explode("\n","trim($comment)");
+               $comment_array = explode("\n","trim($arguments[1])");
                $num = count($comment_array);
-               $data = "\n".$num+$arg_nums;
+               $data = "\n".$num+$arg_nums-2;
                if($arg_nums > 2){
-                      for($loop = 0 ; $loop < $ars_nums-2 ; $loop++){
-                            $data = $data."\n".$arguments;
+                      for($loop = 2 ; $loop < $arg_nums ; $loop++){
+                            $data = $data."\n".$arguments[$loop];
                       }
                }
-               $data = $data."\n".$comment;
-               if($file_open = fopen("$file_name","a")){
+               $data = $data."\n".$arguments[1];
+               if($file_open = fopen("$arguments[0]","a")){
                       flock($file_open,LOCK_SH);
                            fwrite($file_open,$data);
                       flock($file_open,LOCK_UN);
                   fclose($file_open);
+                  return 1;
               }else{
                       return 0;
               }
