@@ -54,8 +54,6 @@ final class file_operation{
                    $arguments = func_get_args();
                    $arg_nums = func_num_args();
             
-               
-       
                    $post_array = explode("\n","trim($arguments[1])");
                    $num = count($post_array)+$arg_nums-2;
                    $data = $num;
