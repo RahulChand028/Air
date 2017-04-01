@@ -89,14 +89,23 @@ final class file_operation{
                      return $result;
                }
         }
-      public function write_comment($file_name,$identity,$comment){
+      public function write_comment(){
+               $arguments = func_get_args();
+               $arg_nums = func_num_args();
+          
                if(!file_exists($file_name) || !is_readable($file_name)){
                      return 0;
                }
-               $date = date("h")." : ".date("i").date("A")."  ".date("j")."-".date("M")."-".date("Y");
+          
                $comment_array = explode("\n","trim($comment)");
-               $num = count($comment_array)+2;
-               $data = "\n".$num."\n".$identity."\n".$date."\n".$comment;
+               $num = count($comment_array);
+               $data = "\n".$num+$arg_nums;
+               if($arg_nums > 2){
+                      for($loop = 0 ; $loop < $ars_nums-2 ; $loop++){
+                            $data = $data."\n".$arguments;
+                      }
+               }
+               $data = $data."\n".$comment;
                if($file_open = fopen("$file_name","a")){
                       flock($file_open,LOCK_SH);
                            fwrite($file_open,$data);
