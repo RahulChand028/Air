@@ -1,5 +1,5 @@
 <?php
-namespace Air/database;
+namespace Air\database;
 final class data_base_query{
 
      private $link_open;
