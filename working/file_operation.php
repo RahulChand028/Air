@@ -178,6 +178,115 @@ final class file_operation{
                     return $result;
                  }
              }
+             public function list_add(){
+
+             	      $arg_nums = func_num_args();
+             	      $arguments = func_get_args(); 
+             	      $item = "";
+                      for($loop = 1;$loop < $arg_nums;$loop++){
+                      		  $item = $item.$arguments["$loop"]."\n";
+                      }
+
+                     $file_open = fopen("$arguments[0]","a");
+                     if(!$file_open){
+                     	 return 0;
+                     }
+                     flock($file_open,LOCK_EX);
+                        fwrite($file_open,$item);
+                     flock($file_open,LOCK_UN);
+                     fclose($file_open);
+                     return 1;
+           }
+           public function list_update($file_name,$update_item,$new_item){
+             	
+             	  $list_item = [];
+             	  $position = [];
+             	  $data = "";
+             	  $update_item = trim($update_item);
+             	  $new_item = trim($new_item);
+               
+             	  if($position = $this->list_search($file_name,$update_item)){
+             		   if($list_item = $this->read_file($file_name)){
+             		   	
+             		       foreach($position as $key){
+                             $list_item[$key-1] = "$new_item";             		                      
+             		       }
+             		   }          
+             	  }
+             	  if(count($list_item)){
+             	  	        foreach($list_item as $item){
+                                $data = $data.$item."\n";   
+             	  	        }
+             	  	        $file_open = fopen("$file_name","w");
+             	  	        if(!$file_open){
+             	  	        	  return 0;
+             	  	        }
+             	  	        flock($file_open,LOCK_EX);
+             	  	           fwrite($file_open,"$data");
+             	  	        flock($file_open,LOCK_UN);
+                          fclose($file_open);
+                          return 1;
+             	  }
+             	  return 0;
+             }
+    
+             public function list_search($file_name,$search_item){
+             	      $list = [];
+             	      $position = 0;
+                 
+             	      $file_open = fopen("$file_name","r");
+             	      if(!$file_open){
+             	      	 return 0;
+             	      }
+             	      flock($file_open,LOCK_SH);
+             	         while(++$position && $item = fgets($file_open)){
+             	         	  if(trim($item) == $search_item){
+             	      	    	   $list[] = $position;
+             	      	     }
+             	         }
+             	      flock($file_open,LOCK_UN);
+                     fclose($file_open);
+                     
+             	      if(count($list)){ 
+             	           return $list;
+             	      }else{
+                          return 0;             	      
+             	      }
+             }
+              public function write_section(){
+                   $arguments = func_get_args();
+                   $arg_nums = func_num_args();
+
+                   $post_array = explode("\n","trim($arguments[1])");
+                   $num = count($post_array)+$arg_nums-2;
+                   $data = $num;
+                   if($arg_nums > 2){
+                       for($loop = 2;$loop < $arg_nums;$loop++){
+                           $data = $data."\n".$arguments[$loop];
+                       }
+                   }
+                   if(filesize($arguments[0])){
+                   	 $data = "\n".$data."\n".$arguments[1]; 
+                   }else{
+                         $data = $data."\n".$arguments[1];
+                   }
+                   if($file_open = fopen("$arguments[0]","a")){
+                        flock($file_open,LOCK_EX);
+                             fwrite($file_open,$data);
+                        flock($file_open,LOCK_UN);
+                      fclose($file_open);
+                      return 1;
+                   }else{
+                         return 0;
+                   }
+              }
+              public function read_section($file_name){
+              	
+              	    if($data = $this->read_comment_file($file_name)){
+                           return $data;              	    
+              	    }
+              
+              }
 
 }
 ?>
