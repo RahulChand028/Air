@@ -21,7 +21,7 @@ final class file_operation{
                              }
                               while($content = fgets($file_open)){
                                     if(++$x == $arguments[1]){
-                                         $result = $content;
+                                         $result = trim($content);
                                          break;
                                      }
                                }
@@ -35,9 +35,9 @@ final class file_operation{
                                while($content = fgets($file_open)){
                                      if(++$x == $arguments[1]){
                                          $line = $x;
-                                         $result[] = $content;
+                                         $result[] = trim($content);
                                          while($x < $line+$arguments[2] && $content = fgets($file_open)){
-                                              $result[] = $content;
+                                              $result[] = trim($content);
                                               $x++;
                                           }
                                           break;
@@ -64,7 +64,7 @@ final class file_operation{
                    }
                    $data = $data."\n".$arguments[1];
                    if($file_open = fopen("$arguments[0]","w")){
-                        flock($file_open,LOCK_SH);
+                        flock($file_open,LOCK_EX);
                              fwrite($file_open,$data);
                         flock($file_open,LOCK_UN);
                       fclose($file_open);
@@ -84,7 +84,7 @@ final class file_operation{
                          flock($file_open,LOCK_SH);
                               $num = fgets($file_open);
                               while(++$start < $num+1 && $content = fgets($file_open)){
-                                    $result[] = $content;
+                                    $result[] = trim($content);
                               }
                          flock($file_open,LOCK_UN);
                      fclose($file_open);
@@ -109,7 +109,7 @@ final class file_operation{
                }
                $data = $data."\n".$arguments[1];
                if($file_open = fopen("$arguments[0]","a")){
-                      flock($file_open,LOCK_SH);
+                      flock($file_open,LOCK_EX);
                            fwrite($file_open,$data);
                       flock($file_open,LOCK_UN);
                   fclose($file_open);
@@ -133,7 +133,7 @@ final class file_operation{
                             do{
                                    $start = 0;
                                    while(++$start < $num+1 && $content = fgets($file_open)){
-                                           $result[$index][] = $content;
+                                           $result[$index][] = trim($content);
                                     }
                                     $num = fgets($file_open);
                             }while($num && ++$index);
@@ -151,6 +151,9 @@ final class file_operation{
                                  $result = file("$file_name");
                             flock($file_open,LOCK_UN);
                         fclose($file_open);
+                        foreach($result as $key=>$value){
+                            $result[$key] = trim($value);                        
+                        }
                         return $result;
                   }
             }
@@ -166,7 +169,7 @@ final class file_operation{
                             do{
                                    $start = 0;
                                    while(++$start < $num+1 && $content = fgets($file_open)){
-                                           $result[$index][] = $content;
+                                           $result[$index][] = trim($content);
                                     }
                                     $num = fgets($file_open);
                             }while($num && ++$index);
