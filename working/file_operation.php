@@ -181,7 +181,7 @@ final class file_operation{
              public function list_add(){
 
              	      $arg_nums = func_num_args();
-             	      $arguments = func_get_args(); 
+             	      $arguments = func_get_args();�
              	      $item = "";
                       for($loop = 1;$loop < $arg_nums;$loop++){
                       		  $item = $item.$arguments["$loop"]."\n";
@@ -265,10 +265,14 @@ final class file_operation{
                            $data = $data."\n".$arguments[$loop];
                        }
                    }
-                   if(filesize($arguments[0])){
-                   	 $data = "\n".$data."\n".$arguments[1]; 
+                   if(file_exists($arguments[0])){
+                        if(filesize($arguments[0])){
+                   	           $data = "\n".$data."\n".$arguments[1]; 
+                        }else{
+                               $data = $data."\n".$arguments[1];
+                        }
                    }else{
-                         $data = $data."\n".$arguments[1];
+                          $data = $data."\n".$arguments[1];
                    }
                    if($file_open = fopen("$arguments[0]","a")){
                         flock($file_open,LOCK_EX);
