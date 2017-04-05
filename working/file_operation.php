@@ -181,7 +181,7 @@ final class file_operation{
              public function list_add(){
 
              	      $arg_nums = func_num_args();
-             	      $arguments = func_get_args();�
+             	      $arguments = func_get_args();
              	      $item = "";
                       for($loop = 1;$loop < $arg_nums;$loop++){
                       		  $item = $item.$arguments["$loop"]."\n";
