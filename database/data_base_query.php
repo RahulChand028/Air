@@ -15,14 +15,14 @@ final class data_base_query{
      function db_conn($data_base){
             $this->link_open = mysqli_connect("$this->host","$this->user","$this->key");
             if(!$this->link_open){ 
-                   echo "Failed to connect to MySQL: " . mysqli_connect_error();
+                   #echo "Failed to connect to MySQL: " . mysqli_connect_error();
                    return 0;
              }
             $dc = mysqli_select_db($this->link_open,"$data_base");
             if(!$dc){
                    mysqli_close($this->link_open);
                    unset($dc);
-                   echo"<br>unable to connect database<br>";
+                   #echo"<br>unable to connect database<br>";
                    return 0;
              }
              return 1;
@@ -67,7 +67,7 @@ final class data_base_query{
                                           return 0;
                               }
                        }else{
-                              echo"<br>check number of arguments<br>";
+                              #echo"<br>check number of arguments<br>";
                               return 0;
                        }
         }
@@ -111,7 +111,7 @@ final class data_base_query{
                                         return 0;
                          } 
                     }else{
-                         echo"<br>Check number of arguments<br>";
+                         #echo"<br>Check number of arguments<br>";
                          return 0;
                     }
           }
@@ -152,15 +152,15 @@ final class data_base_query{
                                           return $result;
                                      }else{
                                           mysqli_close($this->link_open);
-                                          return 0 ;
+                                          return 0;
                                       }
                               }else{
-                                       echo"<br> make sure your arguments once again<br>";
+                                       #echo"<br> make sure your arguments once again<br>";
                                        mysqli_close($this->link_open);
-                                       return 0 ;
+                                       return 0;
                                }
                      }else{
-                             echo"check number of arguments";
+                             #echo"check number of arguments";
                              return 0;
                      }
              }
@@ -201,7 +201,7 @@ final class data_base_query{
                             return 0;
                     }
              }else{
-                    echo"check number of arguments";
+                    #echo"check number of arguments";
                     return 0;
             }
  }
@@ -247,7 +247,7 @@ final class data_base_query{
                             return 0;
                     }
              }else{
-                    echo"check number of arguments";
+                    #echo"check number of arguments";
                     return 0;
              }
  }
@@ -290,12 +290,12 @@ final class data_base_query{
                             return 0 ;
                      }
                 }else{
-                            echo"<br> make sure your arguments once again<br>";
+                            #echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
                             return 0 ;
                 }
            }else{
-               echo "<br>check number of arguments</br>";
+               #echo "<br>check number of arguments</br>";
                return 0;
           }
  }
@@ -344,12 +344,12 @@ final class data_base_query{
                             return 0 ;
                      }
                 }else{
-                            echo"<br> make sure your arguments once again<br>";
+                            #echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
                             return 0 ;
                 }
         }else{
-            echo"<br>check number of arguments<br>";
+             #echo"<br>check number of arguments<br>";
              return 0;
         }
  }
@@ -404,12 +404,12 @@ final class data_base_query{
                             return 0 ;
                      }
                 }else{
-                            echo"<br> make sure your arguments once again<br>";
+                            #echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
                             return 0 ;
                 }
         }else{
-          echo"<br>check number of arguments<br>";
+          #echo"<br>check number of arguments<br>";
           return 0;
         }
  } 
@@ -478,7 +478,7 @@ final class data_base_query{
                             return 0;
                    }
             }else{
-                  echo"<br>check number of arguments<br>";
+                  #echo"<br>check number of arguments<br>";
                   return 0;
             }
   }
@@ -521,12 +521,12 @@ final class data_base_query{
                             return 0 ;
                          }
                     }else{
-                            echo"<br> make sure your arguments once again<br>";
+                            #echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
                             return 0 ;
                    }
             }else{ 
-                  echo"<br>check number of arguments<br>";
+                  #echo"<br>check number of arguments<br>";
                   return 0;
             }
   }
@@ -546,7 +546,7 @@ final class data_base_query{
                             return 0;
                    }
             }else{
-                  echo"<br>check number of arguments<br>";
+                  #echo"<br>check number of arguments<br>";
                   return 0;
             }
   }
@@ -566,7 +566,7 @@ final class data_base_query{
                             return 0;
                    }
             }else{
-                  echo"<br>check number of arguments<br>";
+                  #echo"<br>check number of arguments<br>";
                   return 0;
             }
   }
@@ -609,12 +609,12 @@ final class data_base_query{
                            return 0 ;
                         }
                   }else{
-                       echo"<br> make sure your arguments once again<br>";
+                       #echo"<br> make sure your arguments once again<br>";
                        mysqli_close($this->link_open);
                        return 0 ;
                  }
           }else{
-                 echo"<br>check number of arguments<br>";
+                 #echo"<br>check number of arguments<br>";
                  return 0;
          }
   }
