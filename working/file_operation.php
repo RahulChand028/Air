@@ -288,7 +288,9 @@ final class file_operation{
               	
               	    if($data = $this->read_comment_file($file_name)){
                            return $data;              	    
-              	    }
+              	    }else{
+                           return 0;
+                    }
               
               }
 
