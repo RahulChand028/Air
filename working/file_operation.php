@@ -253,6 +253,41 @@ final class file_operation{
                           return 0;             	      
              	      }
              }
+              public function list_remove($file_name , $data){
+
+                     $present = 0;
+                     $new_data = [];
+                     $list = "";
+                     $data = trim($data);
+             		 if($list_item = $this->read_file($file_name)){
+             	          foreach($list_item as $key=>$value){
+                              if($value != $data){
+                                   $list_item[$key] = $value;
+                              }else{
+                                    $list_item[$key] = "";
+                                    $present = 1;
+                              }
+                          }
+             		 }
+                     if($present == 1){
+             	  	        foreach($list_item as $item){
+                               if($item != ""){
+                                   $list = $list.$item."\n";
+                                }
+             	  	        }
+             	  	        $file_open = fopen("$file_name","w");
+             	  	        if(!$file_open){
+             	  	        	  return 0;
+             	  	        }
+             	  	        flock($file_open,LOCK_EX);
+             	  	           fwrite($file_open,"$list");
+             	  	        flock($file_open,LOCK_UN);
+                          fclose($file_open);
+                          return 1;
+             	      }else{
+                          return 0;
+                      }
+              }
               public function write_section(){
                    $arguments = func_get_args();
                    $arg_nums = func_num_args();
