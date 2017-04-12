@@ -232,25 +232,19 @@ final class file_operation{
     
              public function list_search($file_name,$search_item){
              	      $list = [];
-             	      $position = 0;
+             	      $position = [];
                  
-             	      $file_open = fopen("$file_name","r");
-             	      if(!$file_open){
-             	      	 return 0;
-             	      }
-             	      flock($file_open,LOCK_SH);
-             	         while(++$position && $item = fgets($file_open)){
-             	         	  if(trim($item) == $search_item){
-             	      	    	   $list[] = $position;
-             	      	     }
-             	         }
-             	      flock($file_open,LOCK_UN);
-                     fclose($file_open);
-                     
-             	      if(count($list)){ 
-             	           return $list;
+                      if($list = $this->read_file($file_name)){
+                               foreach($list as $key=>$list_item){
+                                     if(trim($list_item) == trim($search_item)){
+                                        $position[] = $key+1;
+                                     }
+                               }
+                      }
+             	      if(count($position)){
+             	           return $position;
              	      }else{
-                          return 0;             	      
+                          return 0;
              	      }
              }
               public function list_remove($file_name , $data){
