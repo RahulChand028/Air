@@ -1,6 +1,6 @@
 <?php
 
-namespace Air/file_operation;
+namespace Air\file_operation;
 
 final class file_operation{
 
