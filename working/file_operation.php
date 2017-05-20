@@ -84,7 +84,7 @@ final class file_operation{
                          flock($file_open,LOCK_SH);
                               $num = fgets($file_open);
                               while(++$start < $num+1 && $content = fgets($file_open)){
-                                    $result[] = trim($content);
+                                    $result[] = $content;
                               }
                          flock($file_open,LOCK_UN);
                      fclose($file_open);
@@ -133,7 +133,7 @@ final class file_operation{
                             do{
                                    $start = 0;
                                    while(++$start < $num+1 && $content = fgets($file_open)){
-                                           $result[$index][] = trim($content);
+                                           $result[$index][] = $content;
                                     }
                                     $num = fgets($file_open);
                             }while($num && ++$index);
