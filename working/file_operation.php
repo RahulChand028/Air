@@ -250,23 +250,30 @@ final class file_operation{
               public function list_remove($file_name , $data){
 
                      $list = "";
+                     $write = 0;
                      $data = trim($data);
              		
                      if($list_item = $this->read_file($file_name)){
                            foreach($list_item as $item){
                                if(trim($item) != $data){
                                     $list = $list.$item."\n";
+                               }else{
+                                    $write = 1;
                                }
                            }
-                           $file_open = fopen("$file_name","w");
-             	  	       if(!$file_open){
-             	  	           return 0;
-             	  	       }
-             	  	         flock($file_open,LOCK_EX);
-             	  	            fwrite($file_open,"$list");
-             	  	         flock($file_open,LOCK_UN);
-                           fclose($file_open);
-                           return 1;
+                         if($write == 1){
+                             $file_open = fopen("$file_name","w");
+             	  	         if(!$file_open){
+             	  	            return 0;
+             	  	         }
+             	  	          flock($file_open,LOCK_EX);
+             	  	             fwrite($file_open,"$list");
+             	  	          flock($file_open,LOCK_UN);
+                             fclose($file_open);
+                             return 1;
+                          }else{
+                             return 0;
+                          }
                       }else{
                              return 0;
                       }
