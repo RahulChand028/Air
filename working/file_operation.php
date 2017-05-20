@@ -53,8 +53,8 @@ final class file_operation{
         public function write_post(){
                    $arguments = func_get_args();
                    $arg_nums = func_num_args();
-            
-                   $post_array = explode("\n","trim($arguments[1])");
+                   $arguments[1] = trim($arguments[1]);
+                   $post_array = explode("\n","$arguments[1]");
                    $num = count($post_array)+$arg_nums-2;
                    $data = $num;
                    if($arg_nums > 2){
@@ -98,16 +98,16 @@ final class file_operation{
                if(!file_exists($arguments[0]) || !is_readable($arguments[0])){
                      return 0;
                }
-          
-               $comment_array = explode("\n","trim($arguments[1])");
+               $arguments[1] = trim($arguments[1]);
+               $comment_array = explode("\n","$arguments[1]");
                $num = count($comment_array);
-               $data = "\n".$num+$arg_nums-2;
+               $data = $num+$arg_nums-2;
                if($arg_nums > 2){
                       for($loop = 2 ; $loop < $arg_nums ; $loop++){
                             $data = $data."\n".$arguments[$loop];
                       }
                }
-               $data = $data."\n".$arguments[1];
+               $data = "\n".$data."\n".$arguments[1];
                if($file_open = fopen("$arguments[0]","a")){
                       flock($file_open,LOCK_EX);
                            fwrite($file_open,$data);
