@@ -53,7 +53,7 @@ final class file_operation{
         public function write_post(){
                    $arguments = func_get_args();
                    $arg_nums = func_num_args();
-                   $arguments[1] = trim($arguments[1]);
+                   $arguments[1] = rtrim($arguments[1]);
                    $post_array = explode("\n","$arguments[1]");
                    $num = count($post_array)+$arg_nums-2;
                    $data = $num;
@@ -98,7 +98,7 @@ final class file_operation{
                if(!file_exists($arguments[0]) || !is_readable($arguments[0])){
                      return 0;
                }
-               $arguments[1] = trim($arguments[1]);
+               $arguments[1] = rtrim($arguments[1]);
                $comment_array = explode("\n","$arguments[1]");
                $num = count($comment_array);
                $data = $num+$arg_nums-2;
@@ -275,8 +275,9 @@ final class file_operation{
               public function write_section(){
                    $arguments = func_get_args();
                    $arg_nums = func_num_args();
-
-                   $post_array = explode("\n","trim($arguments[1])");
+                   
+                   $arguments[1] = rtrim($arguments[1]);
+                   $post_array = explode("\n","$arguments[1]");
                    $num = count($post_array)+$arg_nums-2;
                    $data = $num;
                    if($arg_nums > 2){
