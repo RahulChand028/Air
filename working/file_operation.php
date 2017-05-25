@@ -234,12 +234,17 @@ final class file_operation{
              	      $list = [];
              	      $position = [];
                  
-                      if($list = $this->read_file($file_name)){
-                               foreach($list as $key=>$list_item){
-                                     if(trim($list_item) == trim($search_item)){
-                                        $position[] = $key+1;
-                                     }
-                               }
+                      if($file_open = fopen($file_name,"r")){
+                         $count = 1;
+                            while($str = fgets($file_open)){
+                                  if(trim($search_item) == trim($str)){
+                                      $position[] = $count;
+                                  }
+                                   $count++;
+                            }
+                         fclose($file_open);
+                      }else{
+                            return  0;
                       }
              	      if(count($position)){
              	           return $position;
