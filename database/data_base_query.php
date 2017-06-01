@@ -32,7 +32,7 @@ final class data_base_query{
                  $arguments = func_get_args();
                         if($arg_num >=4 && $arg_num%2 == 0){
                               if(!data_base_query::db_conn($arguments[0])){
-                                     return 0;
+                                     return -1;
                               }
                               $Q = "INSERT INTO $arguments[1] (";
                               $x = 2;
@@ -55,20 +55,20 @@ final class data_base_query{
                               }
                               $Q = $Q." )";
                               if(mysqli_query($this->link_open,$Q)){ 
-                                    if(mysqli_affected_rows($this->link_open) > 0){              
+                                    if($result = mysqli_affected_rows($this->link_open)){              
                                            mysqli_close($this->link_open);
-                                           return 1;
+                                           return $result;
                                      }else{
                                             mysqli_close($this->link_open);
-                                            return 0;
+                                            return -1;
                                      }
                               }else{
                                           mysqli_close($this->link_open);      
-                                          return 0;
+                                          return -1;
                               }
                        }else{
                               #echo"<br>check number of arguments<br>";
-                              return 0;
+                              return -1;
                        }
         }
         function delete(){
@@ -76,7 +76,7 @@ final class data_base_query{
                    $arguments = func_get_args();
                    if($arg_num == 4 || $arg_num == 6){
                         if(!data_base_query::db_conn($arguments[0])){
-                                return 0;
+                                return -1;
                          }
                          if($arg_num == 4){
                                if($arguments[3] == "NULL"){
@@ -104,15 +104,15 @@ final class data_base_query{
                                         return $result;
                                   }else{
                                          mysqli_close($this->link_open);
-                                         return 0 ;
+                                         return -1 ;
                                   }
                          }else{
                                         mysqli_close($this->link_open);
-                                        return 0;
+                                        return -1;
                          } 
                     }else{
                          #echo"<br>Check number of arguments<br>";
-                         return 0;
+                         return -1;
                     }
           }
           function search_value(){
@@ -120,18 +120,18 @@ final class data_base_query{
                    $arguments = func_get_args();
                      if($arg_num > 4){
                                if(!data_base_query::db_conn($arguments[0])){
-                                        return 0;
+                                        return -1;
                                 }
                                $Q = "SELECT ";
                                $x = 2;
                                while($x < $arg_num-2){
 
-                                    if($x == 2){
+                                   if($x == 2){
                                          $Q = $Q.$arguments[$x];
                                    }else{
                                          $Q = $Q." , ".$arguments[$x];
-                                     }
-                                    $x++;
+                                   }
+                                   $x++;
                                }
                               $Q = $Q." FROM ". $arguments[1] . " WHERE ". $arguments[$x] ." LIKE  '". $arguments[++$x]."'";
                               if($runquery = mysqli_query($this->link_open,$Q)){
@@ -150,18 +150,20 @@ final class data_base_query{
                                           }
                                           mysqli_close($this->link_open);
                                           return $result;
+                                     }else if(mysqli_num_rows($runquery) == 0){
+                                          return 0;
                                      }else{
                                           mysqli_close($this->link_open);
-                                          return 0;
+                                          return -1;
                                       }
                               }else{
                                        #echo"<br> make sure your arguments once again<br>";
                                        mysqli_close($this->link_open);
-                                       return 0;
+                                       return -1;
                                }
                      }else{
                              #echo"check number of arguments";
-                             return 0;
+                             return -1;
                      }
              }
       function update_value(){
@@ -170,7 +172,7 @@ final class data_base_query{
             if($arg_num >=6 && $arg_num%2 == 0){
                     $arg_num = $arg_num-4;
                     if(!data_base_query::db_conn($arguments[0])){
-                            return 0;
+                            return -1;
                      }
                     $Q = "UPDATE $arguments[1] SET ";
                     $x = 2;
@@ -194,15 +196,15 @@ final class data_base_query{
                                return $result;
                           }else{
                                mysqli_close($this->link_open);
-                               return 0;
+                               return -1;
                           }
                     }else{
                             mysqli_close($this->link_open);      
-                            return 0;
+                            return -1;
                     }
              }else{
                     #echo"check number of arguments";
-                    return 0;
+                    return -1;
             }
  }
  function d_update_value(){
@@ -211,7 +213,7 @@ final class data_base_query{
             if($arg_num >=8 && $arg_num%2 == 0){
                     $arg_num = $arg_num-6;
                     if(!data_base_query::db_conn($arguments[0])){
-                            return 0;
+                            return -1;
                      }
                     $Q = "UPDATE $arguments[1] SET ";
                     $x = 2;
@@ -240,15 +242,15 @@ final class data_base_query{
                                return $result;
                         }else{
                                mysqli_close($this->link_open);
-                               return 0;
+                               return -1;
                         }
                     }else{
                             mysqli_close($this->link_open);      
-                            return 0;
+                            return -1;
                     }
              }else{
                     #echo"check number of arguments";
-                    return 0;
+                    return -1;
              }
  }
  function return_value(){
@@ -256,7 +258,7 @@ final class data_base_query{
          $arguments = func_get_args();
          if($arg_num > 2){
              if(!data_base_query::db_conn($arguments[0])){
-                        return 0;
+                        return -1;
                }
              $Q = "SELECT ";
              $x = 2;
@@ -270,7 +272,7 @@ final class data_base_query{
                }
                $Q = $Q." FROM ".$arguments[1];
                if($runquery = mysqli_query($this->link_open,$Q)){
-                     if(mysqli_num_rows($runquery) >= 1){
+                     if(mysqli_num_rows($runquery) > 0){
                            $result = array();
                            while($data = mysqli_fetch_array($runquery)){
                                 if($arg_num == 3){
@@ -285,18 +287,21 @@ final class data_base_query{
                             }
                             mysqli_close($this->link_open);
                             return $result;
+                     }else if(mysqli_num_rows($runquery) == 0){
+                            mysqli_close($this->link_open);
+                            return 0;
                      }else{
                             mysqli_close($this->link_open);
-                            return 0 ;
+                            return -1 ;
                      }
                 }else{
                             #echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
-                            return 0 ;
+                            return -1 ;
                 }
            }else{
                #echo "<br>check number of arguments</br>";
-               return 0;
+               return -1;
           }
  }
  function return_match_value(){
@@ -304,7 +309,7 @@ final class data_base_query{
         $arguments = func_get_args();
          if($arg_num > 4){
               if(!data_base_query::db_conn($arguments[0])){
-                        return 0;
+                        return -1;
                }
              $Q = "SELECT ";
              $x = 2;
@@ -324,7 +329,7 @@ final class data_base_query{
                 }
               
                if($runquery = mysqli_query($this->link_open,$Q)){
-                     if(mysqli_num_rows($runquery) >= 1){
+                     if(mysqli_num_rows($runquery) > 0){
                            $result = array();
                            while($data = mysqli_fetch_array($runquery)){
                                 if($arg_num == 5){
@@ -339,18 +344,21 @@ final class data_base_query{
                             }
                             mysqli_close($this->link_open);
                             return $result;
+                     }else if(mysqli_num_rows($runquery) == 0){
+                            mysqli_close($this->link_open);
+                            return 0;
                      }else{
                             mysqli_close($this->link_open);
-                            return 0 ;
+                            return -1 ;
                      }
                 }else{
                             #echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
-                            return 0 ;
+                            return -1 ;
                 }
         }else{
              #echo"<br>check number of arguments<br>";
-             return 0;
+             return -1;
         }
  }
  function return_d_match_value(){
@@ -358,7 +366,7 @@ final class data_base_query{
         $arguments = func_get_args();
          if($arg_num > 6){
               if(!data_base_query::db_conn($arguments[0])){
-                        return 0;
+                        return -1;
                }
                $Q = "SELECT ";
                $x = 2;
@@ -384,7 +392,7 @@ final class data_base_query{
                }
 
                if($runquery = mysqli_query($this->link_open,$Q)){
-                     if(mysqli_num_rows($runquery) >= 1){
+                     if(mysqli_num_rows($runquery) > 0){
                            $result = array();
                            while($data = mysqli_fetch_array($runquery)){
                                 if($arg_num == 7){
@@ -399,18 +407,21 @@ final class data_base_query{
                             }
                             mysqli_close($this->link_open);
                             return $result;
+                     }else if(mysqli_num_rows($runquery) == 0){
+                            mysqli_close($this->link_open);
+                            return 0;
                      }else{
                             mysqli_close($this->link_open);
-                            return 0 ;
+                            return -1 ;
                      }
                 }else{
                             #echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
-                            return 0 ;
+                            return -1 ;
                 }
         }else{
-          #echo"<br>check number of arguments<br>";
-          return 0;
+            #echo"<br>check number of arguments<br>";
+            return -1;
         }
  } 
  function drop_table(){
@@ -426,11 +437,11 @@ final class data_base_query{
                         return 1;
                   }else{
                         mysqli_close($this->link_open);
-                        return 0;
+                        return -1;
                   }
            }else{
                     mysqli_close($this->link_open);
-                    return 0;
+                    return -1;
            }
  }
   function add_field(){
@@ -438,7 +449,7 @@ final class data_base_query{
            $arguments = func_get_args();
            if($args_num == 4){
                if(!data_base_query::db_conn($arguments[0])){
-                        return 0;
+                        return -1;
                }
               $Q = "ALTER TABLE $arguments[1] ADD $arguments[2] $arguments[3]";
               if(mysqli_query($this->link_open,$Q)){
@@ -446,11 +457,11 @@ final class data_base_query{
                    return 1;
               }else{
                    mysqli_close($this->link_open);
-                   return 0;
+                   return -1;
               }
            }else{
-                  echo"<br>check number of arguments<br>";
-                  return 0;
+                  #echo"<br>check number of arguments<br>";
+                  return -1;
            }
   }
   function remove_field(){
@@ -458,7 +469,7 @@ final class data_base_query{
             $arguments = func_get_args();
             if($args_num > 2){
                    if(!data_base_query::db_conn($arguments[0])){
-                          return 0;
+                          return -1;
                    }
                    $Q = "ALTER TABLE $arguments[1] DROP ";
                    $x = 2;
@@ -475,11 +486,11 @@ final class data_base_query{
                                   return 1;
                    }else{
                             mysqli_close($this->link_open);
-                            return 0;
+                            return -1;
                    }
             }else{
                   #echo"<br>check number of arguments<br>";
-                  return 0;
+                  return -1;
             }
   }
      function select_query(){           
@@ -487,7 +498,7 @@ final class data_base_query{
             $arguments = func_get_args();
             if($args_num > 3){
                  if(!data_base_query::db_conn($arguments[0])){
-                          return 0;
+                          return -1;
                    }
                   $Q = "SELECT ";  
                    $x = 2;
@@ -523,11 +534,11 @@ final class data_base_query{
                     }else{
                             #echo"<br> make sure your arguments once again<br>";
                             mysqli_close($this->link_open);
-                            return 0 ;
+                            return -1 ;
                    }
             }else{ 
                   #echo"<br>check number of arguments<br>";
-                  return 0;
+                  return -1;
             }
   }
     function change_field(){
@@ -535,7 +546,7 @@ final class data_base_query{
             $arguments = func_get_args();
             if($args_num = 2){
                    if(!data_base_query::db_conn($arguments[0])){
-                          return 0;
+                          return -1;
                    }
                    $Q = "ALTER TABLE $arguments[1] CHANGE $arguments[2] $arguments[3] $arguments[4]";
                    if(mysqli_query($this->link_open,$Q)){
@@ -543,11 +554,11 @@ final class data_base_query{
                                   return 1;
                    }else{
                             mysqli_close($this->link_open);
-                            return 0;
+                            return -1;
                    }
             }else{
                   #echo"<br>check number of arguments<br>";
-                  return 0;
+                  return -1;
             }
   }
   function rename_table(){
@@ -555,7 +566,7 @@ final class data_base_query{
             $arguments = func_get_args();
             if($args_num = 3){
                    if(!data_base_query::db_conn($arguments[0])){
-                          return 0;
+                          return -1;
                    }
                    $Q = "ALTER TABLE $arguments[1] RENAME TO $arguments[2] ";
                    if(mysqli_query($this->link_open,$Q)){
@@ -563,11 +574,11 @@ final class data_base_query{
                                   return 1;
                    }else{
                             mysqli_close($this->link_open);
-                            return 0;
+                            return -1;
                    }
             }else{
                   #echo"<br>check number of arguments<br>";
-                  return 0;
+                  return -1;
             }
   }
      function join_select(){
@@ -575,7 +586,7 @@ final class data_base_query{
           $arguments = func_get_args();
           if($args_num > 2){
                   if(!data_base_query::db_conn($arguments[0])){
-                        return 0;
+                        return -1;
                    }
                   $Q = "SELECT ";
                   $x = 1;
@@ -611,11 +622,11 @@ final class data_base_query{
                   }else{
                        #echo"<br> make sure your arguments once again<br>";
                        mysqli_close($this->link_open);
-                       return 0 ;
+                       return -1 ;
                  }
           }else{
                  #echo"<br>check number of arguments<br>";
-                 return 0;
+                 return -1;
          }
   }
 }  
