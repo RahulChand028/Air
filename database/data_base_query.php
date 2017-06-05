@@ -429,7 +429,7 @@ final class data_base_query{
            $arguments = func_get_args();
            if($args_num == 2){
                   if(!data_base_query::db_conn($arguments[0])){
-                        return 0;
+                        return  -1;
                   }
                   $Q = "DROP TABLE $arguments[1]";
                   if(mysqli_query($this->link_open,$Q)){
@@ -527,7 +527,7 @@ final class data_base_query{
                               }
                             mysqli_close($this->link_open);
                             return $result;
-                        }else{
+                        }else if(mysqli_num_rows($runquery) == 0){
                             mysqli_close($this->link_open);
                             return 0 ;
                          }
@@ -615,7 +615,7 @@ final class data_base_query{
                             }
                             mysqli_close($this->link_open);
                              return $result;
-                        }else{
+                        }else if(mysqli_num_rows($runquery) == 0){
                            mysqli_close($this->link_open);
                            return 0 ;
                         }
