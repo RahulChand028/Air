@@ -2,7 +2,10 @@
                                                    
                                                    
                                                    
-                                                 
+                                              On error -1 will be return
+                                              on success result will be return
+                                              
+                                              
 
 create object called $conn
 
@@ -17,7 +20,7 @@ $conn = new Air\database\data_base_query("localhost","root","password");
 To Insert value
 
 
-if($conn->insert_value("database_name","table_name","name","email","mobile","name_xyz","xyz@email.domain","12345")){
+if($conn->insert_value("database_name","table_name","name","email","mobile","name_xyz","xyz@email.domain","12345") != -1){
 
    echo"value inserted";
 
@@ -35,7 +38,7 @@ else{
 
 TO retrive value
 
-if($x = $conn->return_value("database","table_value","name")){
+if(($x = $conn->return_value("database","table_value","name")) != -1){
  
       foreach($x as $value){
            echo"$value<br />";
@@ -59,7 +62,7 @@ because only name is being retriving if more field is being retrived then two di
 
 Retrive value with one match   
 
-if($x = $conn->return_match_value("database","table_value","name","email","xyz@email.domain")){
+if(($x = $conn->return_match_value("database","table_value","name","email","xyz@email.domain")) != -1){
  
       foreach($x as $value){
            echo"$value<br />";
@@ -67,7 +70,7 @@ if($x = $conn->return_match_value("database","table_value","name","email","xyz@e
 }
 else{
 
-     echo"nothing is there";
+     echo" error !! ";
 }
 
 
@@ -83,7 +86,7 @@ two or more field can be retrive in two dimensional array
 
 Retrive value with two match   
 
-if($x = $conn->return_d_match_value("database","table_value","name","email","xyz@email.domain","id","345")){
+if(($x = $conn->return_d_match_value("database","table_value","name","email","xyz@email.domain","id","345")) != -1){
  
       foreach($x as $value){
            echo"$value<br />";
@@ -91,7 +94,7 @@ if($x = $conn->return_d_match_value("database","table_value","name","email","xyz
 }
 else{
 
-     echo"nothing is there";
+     echo" error !! ";
 }
 
 
@@ -109,11 +112,11 @@ two or more field can be retrive in two dimensional array
 To update value with one match
 
 
-if($conn->update_value("database_name","table_name","name","abc","email","xyz@email.domain")){
+if(($conn->update_value("database_name","table_name","name","abc","email","xyz@email.domain")) != -1){
    echo"data updated";
 }
 else{
-   echo"nothing update ";
+   echo" error !! ";
 }
 
 it will update name to abc where email is xyz@email.domain
@@ -129,11 +132,11 @@ it will update name to abc where email is xyz@email.domain
 
 To upadte value with two match
 
-if($conn->d_update_value("database_name","table_name","name","abc","email","xyz@email.domain","mobile","7484")){
+if(($conn->d_update_value("database_name","table_name","name","abc","email","xyz@email.domain","mobile","7484")) != -1){
    echo"data updated";
 }
 else{
-   echo"nothing update ";
+   echo" error !! ";
 }
 
 it will update name to abc where email is xyz@email.domain and mobile is 7484
@@ -149,13 +152,13 @@ it will update name to abc where email is xyz@email.domain and mobile is 7484
 
 
 
-To delete values
+To delete Tuple
 
-if($conn->delete("database_name","table_name","email","xyz@email.domain")){
+if(($conn->delete("database_name","table_name","email","xyz@email.domain")) != -1){
    echo"data deleted";
 }
 else{
-   echo"nothing deleted ";
+   echo" error !! ";
 }
 
 it will delete data whose email is xyz@email.domain
@@ -167,11 +170,11 @@ it will delete data whose email is xyz@email.domain
 
 
 
-if($conn->delete("database_name","table_name","name","abc","email","xyz@email.domain")){
+if(($conn->delete("database_name","table_name","name","abc","email","xyz@email.domain")) != -1){
    echo"data delete";
 }
 else{
-   echo"nothing delete ";
+   echo" error !! ";
 }
 
 it will dalete data whose name is abc and email is xyz@email.domain
@@ -187,14 +190,14 @@ it will dalete data whose name is abc and email is xyz@email.domain
 To Search value 
 
 
-if($x = $conn->search_value("database_name","table_name","email","name","'a%'")){
+if(($x = $conn->search_value("database_name","table_name","email","name","'a%'")) != -1){
 
            foreach($x as $value){
                 echo"$value<br />";
            }
 }
 else{
-   echo"nothing retrive ";
+   echo" error !! ";
 }
 
 it will retreve all the email in one dimensional where name starts with a
@@ -211,12 +214,12 @@ two or more field can be retrive in two dimensional array
 
 to Drop table
 
-if($x = $conn->drop_table("database_name","table_name")){
+if(($x = $conn->drop_table("database_name","table_name")) != -1){
 
-        echo"table droped";
+      echo"table droped";
 }
 else{
-   echo"nothing retrive ";
+     echo" error !! ";
 }
 
 
@@ -230,12 +233,12 @@ else{
 To add new field 
 
 
-if($x = $conn->add_field("database_name","table_name","email","varchar(20)")){
+if(($x = $conn->add_field("database_name","table_name","email","varchar(20)")) != -1){
 
-         echo"new field added";
+      echo"new field added";
 }
 else{
-   echo" failed to add new field ";
+      echo" error !! ";
 }
 
 
@@ -243,14 +246,14 @@ else{
 
 
 
+To remove field
 
-
-if($conn->remove_field("database_name","table_name","email")){
+if(($conn->remove_field("database_name","table_name","email")) != -1){
 
         echo"field remove";
 }
 else{
-   echo" error ";
+        echo" error !! ";
 }
 
 
@@ -263,14 +266,14 @@ else{
 condition based
 
 
-if($x = $conn->search_value("database_name","table_name","email"," WHERE id > 23 AND id < 53")){
+if(($x = $conn->search_value("database_name","table_name","email"," WHERE id > 23 AND id < 53")) != -1){
 
            foreach($x as $value){
                 echo"$value<br />";
            }
 }
 else{
-   echo"nothing retrive ";
+         echo" error !! ";
 }
 
 
@@ -288,7 +291,7 @@ WHERE country IN('India','japan')
 join Query
 
 
-if($x = $object->join_select("database","select_field","select_field","FROM table_1 a , table_2 b WHERE a.id = b.id")){
+if(($x = $object->join_select("database","select_field","select_field","FROM table_1 a , table_2 b WHERE a.id = b.id")) != -1){
        print_r($x);
 }
 else{
