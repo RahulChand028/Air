@@ -190,7 +190,7 @@ it will dalete data whose name is abc and email is xyz@email.domain
 To Search value 
 
 
-if(($x = $conn->search_value("database_name","table_name","email","name","'a%'")) != -1){
+if(($x = $conn->search_value("database_name","table_name","email","name","a%")) != -1){
 
            foreach($x as $value){
                 echo"$value<br />";
