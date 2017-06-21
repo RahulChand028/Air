@@ -266,7 +266,7 @@ else{
 condition based
 
 
-if(($x = $conn->search_value("database_name","table_name","email"," WHERE id > 23 AND id < 53")) != -1){
+if(($x = $conn->select_query("database_name","table_name","email"," WHERE id > 23 AND id < 53")) != -1){
 
            foreach($x as $value){
                 echo"$value<br />";
@@ -299,4 +299,40 @@ else{
 }
 select filed could be of any numbers
 
+ 
+ 
+Rename table
 
+if($object->rename_table("database","current_name","new_name") != -1){
+      echo"table name changed";
+}else{
+      echo"error !!";
+}
+
+table is renamed table with name current_name is now new_name 
+
+
+
+Change column
+
+if($object->change_field("database","table_name","b a varchar(20)")){
+     echo"b changed new name is a";
+}else{
+     echo"error !!";
+}
+
+column name b changed with a and type is varchar(20)
+
+
+
+
+
+Run any query
+
+if($object->query_runner("database","query") != -1){
+        echo"query runs";
+}else{
+        echo"error !!";
+}
+
+it takes any query and execute it. It only return either query executed or not 
