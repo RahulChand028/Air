@@ -229,12 +229,12 @@ final class data_base_query{
                      if($arguments[++$x] == "NULL"){
                               $Q = $Q." IS ".$arguments[$x]." AND ".$arguments[++$x];
                      }else{
-                              $Q = $Q." = '".$arguments[$x]." AND ".$arguments[++$x];
+                              $Q = $Q." = '".$arguments[$x]."' AND ".$arguments[++$x];
                      }
                      if($arguments[++$x] == "NULL"){
                               $Q = $Q." IS ".$arguments[$x];
                      }else{
-                              $Q = $Q." = '".$arguments[$x];
+                              $Q = $Q." = '".$arguments[$x]."'";
                      }
                    if($runquery = mysqli_query($this->link_open,$Q)){
                         if($result = mysqli_affected_rows($this->link_open)){               
@@ -629,5 +629,26 @@ final class data_base_query{
                  return -1;
          }
   }
+  function query_runner(){
+
+            $args_num = func_num_args();
+            $arguments = func_get_args();
+            if($args_num = 2){
+                   if(!data_base_query::db_conn($arguments[0])){
+                          return -1;
+                   }
+                   $Q = "$arguments[1]";
+                   if(mysqli_query($this->link_open,$Q)){
+                                  mysqli_close($this->link_open);
+                                  return 1;
+                   }else{
+                            mysqli_close($this->link_open);
+                            return -1;
+                   }
+            }else{
+                  #echo"<br>check number of arguments<br>";
+                  return -1;
+            }
+      }
 }  
 ?>
