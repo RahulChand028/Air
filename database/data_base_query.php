@@ -544,11 +544,11 @@ final class data_base_query{
     function change_field(){
             $args_num = func_num_args();
             $arguments = func_get_args();
-            if($args_num = 2){
+            if($args_num = 3){
                    if(!data_base_query::db_conn($arguments[0])){
                           return -1;
                    }
-                   $Q = "ALTER TABLE $arguments[1] CHANGE $arguments[2] $arguments[3] $arguments[4]";
+                   $Q = "ALTER TABLE $arguments[1] CHANGE $arguments[2]";
                    if(mysqli_query($this->link_open,$Q)){
                                   mysqli_close($this->link_open);
                                   return 1;
