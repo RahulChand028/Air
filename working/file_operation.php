@@ -1,9 +1,14 @@
 <?php
 
-namespace Air\file_operation;
 
 final class file_operation{
+   /*
+         object->read_line("file_name",line_number);
+         object->read_line("file_name",6); 
 
+         object->read_line("file_name",line_number,number_of_more_line_after_that);
+         object->read_line("file_name",6,8);  --->>> it will read line number 6 and 8 more line after that as well
+   */
     public function read_line(){
          $arguments = func_get_args();
          $num_args = func_num_args();
@@ -11,6 +16,7 @@ final class file_operation{
                     return 0;
               }else{
                     $x = 0;
+                    $result = 0;  // this change
                     $file_open = fopen("$arguments[0]","r");
                        flock($file_open,LOCK_SH);
                        if($num_args == 2){
@@ -21,7 +27,7 @@ final class file_operation{
                              }
                               while($content = fgets($file_open)){
                                     if(++$x == $arguments[1]){
-                                         $result = trim($content);
+                                         $result = rtrim($content);
                                          break;
                                      }
                                }
@@ -35,9 +41,9 @@ final class file_operation{
                                while($content = fgets($file_open)){
                                      if(++$x == $arguments[1]){
                                          $line = $x;
-                                         $result[] = trim($content);
+                                         $result[] = rtrim($content);
                                          while($x < $line+$arguments[2] && $content = fgets($file_open)){
-                                              $result[] = trim($content);
+                                              $result[] = rtrim($content);
                                               $x++;
                                           }
                                           break;
@@ -49,7 +55,10 @@ final class file_operation{
                       return $result;
                 }
         }
-
+        /*
+              $object->write_post("file_name","post_to_write","singled_line_additional_data")
+              $object->write_post("file_name","$post","time","name"); -->> time and name is singled line addtional data more singled line data can be stored
+        */
         public function write_post(){
                    $arguments = func_get_args();
                    $arg_nums = func_num_args();
@@ -73,8 +82,12 @@ final class file_operation{
                          return 0;
                    }
         }
-         
-      public  function read_post($file_name){
+          /*
+              $object->read_post("file_name");
+              $object->read_post("file_name"); -->> it return 1'D array where singled_line_additional_data is return first then comment
+              like in previous write_post() time is indexed 0 in array and name is indexed 1 then remaining array is post
+        */
+        public function read_post($file_name){
                if(!file_exists($file_name) || !is_readable($file_name)){
                      return 0;
                }else{
@@ -91,6 +104,10 @@ final class file_operation{
                      return $result;
                }
         }
+         /*
+              $object->write_comment("file_name","comment","singled_line_additional_data");
+              $object->write_comment("file_name","comment","time","name"); -->> as same as in write_post
+        */
         public function write_comment(){
                $arguments = func_get_args();
                $arg_nums = func_num_args();
@@ -118,6 +135,11 @@ final class file_operation{
                       return 0;
               }
          }
+          /*
+              $object->read_comment("file_name");
+              $object->read_comment("file_name"); -->> it return 2'D array where it contain arrays on comments and singled_line_additional_data is return first then comment
+              like in previous write_comment() time is indexed 0 in array and name is indexed 1 then remaining array is post
+        */
         public function read_comment($file_name){
                if(!file_exists($file_name) || !is_readable($file_name)){
                      return 0;
@@ -142,6 +164,9 @@ final class file_operation{
                     return $result;
                  }
              }
+             /*
+                 $object->read_file("filename");  --->> it will read whole content of file in an array with each line as an array value
+             */
             public function read_file($file_name){
                   if(!file_exists($file_name) || !is_readable($file_name)){
                         return 0;
@@ -157,6 +182,11 @@ final class file_operation{
                         return $result;
                   }
             }
+            /*
+               $object->read_comment_file("filename");
+
+               it will same as a read_comment() but if comment is not written in same file where post is written
+            */
             public function read_comment_file($file_name){
                if(!file_exists($file_name) || !is_readable($file_name)){
                      return 0;
@@ -178,6 +208,16 @@ final class file_operation{
                     return $result;
                  }
              }
+
+            /*
+             
+            $object->list_add("filename","item"); --->>> adds item to list 
+
+            multiple item can be added like 
+            $object->list_add("filename","item","item 1","item 2"); 
+
+              it add data to list
+            */
              public function list_add(){
 
              	      $arg_nums = func_num_args();
@@ -197,6 +237,12 @@ final class file_operation{
                      fclose($file_open);
                      return 1;
            }
+           /*
+              it replace item with another item
+
+              $object->list_update("filename","item_in_list","new_item");  ---->> it will update all the item_in_list with new_item
+           
+           */
            public function list_update($file_name,$update_item,$new_item){
              	
              	  $list_item = [];
@@ -229,7 +275,12 @@ final class file_operation{
              	  }
              	  return 0;
              }
-    
+             /*
+                   it search for item in list and return array contains line number of item in list
+
+                   $object->list_search("filename","item_to_search"); 
+             */
+
              public function list_search($file_name,$search_item){
              	      $list = [];
              	      $position = [];
@@ -252,6 +303,13 @@ final class file_operation{
                           return 0;
              	      }
              }
+
+             /*
+                  it will remove the item from the list
+
+                  $object->list_remove($filename,"item_to_be_removed");
+             
+             */
               public function list_remove($file_name , $data){
 
                      $list = "";
@@ -325,6 +383,5 @@ final class file_operation{
                     }
               
               }
-
 }
 ?>
