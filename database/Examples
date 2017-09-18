@@ -7,12 +7,6 @@
                                               
                                               
 
-create object called $conn
-
-$conn = new Air\database\data_base_query("localhost","root","password");
-
-
-
 
 
 
@@ -20,7 +14,7 @@ $conn = new Air\database\data_base_query("localhost","root","password");
 To Insert value
 
 
-if($conn->insert_value("database_name","table_name","name","email","mobile","name_xyz","xyz@email.domain","12345") != -1){
+if(DB::insert_into("table_name","name","email")->values("nano","nano@domain.com")->run() != -1){
 
    echo"value inserted";
 
@@ -38,7 +32,7 @@ else{
 
 TO retrive value
 
-if(($x = $conn->return_value("database","table_value","name")) != -1){
+if(($x = DB::select("name")->from("table_name")->run()) != -1){
  
       foreach($x as $value){
            echo"$value<br />";
@@ -60,9 +54,9 @@ because only name is being retriving if more field is being retrived then two di
 
 
 
-Retrive value with one match   
+Retrive value with match   
 
-if(($x = $conn->return_match_value("database","table_value","name","email","xyz@email.domain")) != -1){
+if(($x = DB::select("name")->from('table')->where("email = 'xyz@email.domain'")) != -1){
  
       foreach($x as $value){
            echo"$value<br />";
@@ -81,38 +75,10 @@ two or more field can be retrive in two dimensional array
 
 
 
-
-
-
-Retrive value with two match   
-
-if(($x = $conn->return_d_match_value("database","table_value","name","email","xyz@email.domain","id","345")) != -1){
- 
-      foreach($x as $value){
-           echo"$value<br />";
-      }
-}
-else{
-
-     echo" error !! ";
-}
-
-
-it will give all the name where email is xyz@email.domain and id is 345
-two or more field can be retrive in two dimensional array
-
-
-
-
-
-
-
-
-
 To update value with one match
 
 
-if(($conn->update_value("database_name","table_name","name","abc","email","xyz@email.domain")) != -1){
+if((DB::update("table_name")->set("name='abc')->where("email = 'xyz@email.domain'")) != -1){
    echo"data updated";
 }
 else{
@@ -124,37 +90,9 @@ it will update name to abc where email is xyz@email.domain
 
 
 
-
-
-
-
-
-
-To upadte value with two match
-
-if(($conn->d_update_value("database_name","table_name","name","abc","email","xyz@email.domain","mobile","7484")) != -1){
-   echo"data updated";
-}
-else{
-   echo" error !! ";
-}
-
-it will update name to abc where email is xyz@email.domain and mobile is 7484
-
-
-
-
-
-
-
-
-
-
-
-
 To delete Tuple
 
-if(($conn->delete("database_name","table_name","email","xyz@email.domain")) != -1){
+if((DB::delete_from("table_name")->where("email = 'xyz@email.domain'")->run()) != -1){
    echo"data deleted";
 }
 else{
@@ -166,55 +104,9 @@ it will delete data whose email is xyz@email.domain
 
 
 
-
-
-
-
-if(($conn->delete("database_name","table_name","name","abc","email","xyz@email.domain")) != -1){
-   echo"data delete";
-}
-else{
-   echo" error !! ";
-}
-
-it will dalete data whose name is abc and email is xyz@email.domain
-
-
-
-
-
-
-
-
-
-To Search value 
-
-
-if(($x = $conn->search_value("database_name","table_name","email","name","a%")) != -1){
-
-           foreach($x as $value){
-                echo"$value<br />";
-           }
-}
-else{
-   echo" error !! ";
-}
-
-it will retreve all the email in one dimensional where name starts with a
-two or more field can be retrive in two dimensional array
-
-
-
-
-
-
-
-
-
-
 to Drop table
 
-if(($x = $conn->drop_table("database_name","table_name")) != -1){
+if((DB::drop_table("table_name")->run()) != -1){
 
       echo"table droped";
 }
@@ -227,13 +119,10 @@ else{
 
 
 
-
-
-
 To add new field 
 
 
-if(($x = $conn->add_field("database_name","table_name","email","varchar(20)")) != -1){
+if(DB::alter_table("table_name")->add('ex char(20)')->run()!= -1){
 
       echo"new field added";
 }
@@ -248,7 +137,7 @@ else{
 
 To remove field
 
-if(($conn->remove_field("database_name","table_name","email")) != -1){
+if(DB::alter_table("table_name")->drop('ex')->run() != -1){
 
         echo"field remove";
 }
@@ -258,52 +147,11 @@ else{
 
 
 
-
-
-
-
-
-condition based
-
-
-if(($x = $conn->select_query("database_name","table_name","email"," WHERE id > 23 AND id < 53")) != -1){
-
-           foreach($x as $value){
-                echo"$value<br />";
-           }
-}
-else{
-         echo" error !! ";
-}
-
-
-WHERE id > 23 AND id < 53      is a condition here
-
-it could be any sql command used to filter result like
-
-name GROUP BY asc 
-
-WHERE country IN('India','japan')
-
-
-
-
-join Query
-
-
-if(($x = $object->join_select("database","select_field","select_field","FROM table_1 a , table_2 b WHERE a.id = b.id")) != -1){
-       print_r($x);
-}
-else{
-       echo"error";
-}
-select filed could be of any numbers
-
  
  
 Rename table
 
-if($object->rename_table("database","current_name","new_name") != -1){
+if(DB::rename_table("current_name","new_name")->run() != -1){
       echo"table name changed";
 }else{
       echo"error !!";
@@ -315,7 +163,7 @@ table is renamed table with name current_name is now new_name
 
 Change column
 
-if($object->change_field("database","table_name","b a varchar(20)")){
+if(DB::alter_table("table_name")->change('b a varchar(20)')->run()){
      echo"b changed new name is a";
 }else{
      echo"error !!";
@@ -326,13 +174,3 @@ column name b changed with a and type is varchar(20)
 
 
 
-
-Run any query
-
-if($object->query_runner("database","query") != -1){
-        echo"query runs";
-}else{
-        echo"error !!";
-}
-
-it takes any query and execute it. It only return either query executed or not 
