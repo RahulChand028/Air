@@ -388,6 +388,13 @@
           return new where_class($query,"DELETE");
 
       }
+    
+      function rename_table($old,$new) {
+         
+           $query = "RENAME TABLE ".$old." TO ".$new;
+        
+           return new where_class($query,"");
+      }
 
   }
 
