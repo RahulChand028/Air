@@ -140,7 +140,7 @@
 
       }
 
-      function order_by($order_by){
+      function order_by($order_by) {
 
           $this->query = $this->query." ORDER BY ".$order_by;
 
@@ -148,17 +148,17 @@
           
       }
 
-      function group_by(){
+      function group_by($group_by) {
 
-          $this->query = $this->query." GROUP BY ".$order_by;
+          $this->query = $this->query." GROUP BY ".$group_by;
 
           return $this;
 
       }
 
-     function having(){
+     function having($having) {
 
-          $this->query = $this->query." HAVING ".$order_by;
+          $this->query = $this->query." HAVING ".$having;
 
           return $this;
 
