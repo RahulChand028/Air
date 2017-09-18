@@ -1,633 +1,397 @@
 <?php
-namespace Air\database;
-final class data_base_query{
 
-     private $link_open;
-     private $host;
-     private $user;
-     private $key;
 
-     function __construct($host,$user,$key){
-           $this->host = $host;
-           $this->user = $user;
-           $this->key = $key;
-     }   
-     function db_conn($data_base){
-            $this->link_open = mysqli_connect("$this->host","$this->user","$this->key");
-            if(!$this->link_open){ 
-                   #echo "Failed to connect to MySQL: " . mysqli_connect_error();
+  class runner {
+
+    private $link_open;
+    private $db = "igag";
+    private $domain = "localhost";
+    private $admin = "root";
+    private $password = "";
+
+
+
+        function db_conn(){
+
+            $this->link_open = mysqli_connect($this->domain,$this->admin,"");
+            if(!$this->link_open){
+                   //mysqli_connect_error();
                    return 0;
              }
-            $dc = mysqli_select_db($this->link_open,"$data_base");
-            if(!$dc){
+            if(!mysqli_select_db($this->link_open,$this->db)){
                    mysqli_close($this->link_open);
-                   unset($dc);
-                   #echo"<br>unable to connect database<br>";
                    return 0;
              }
              return 1;
-     }
-      function insert_value(){
-                 $arg_num = func_num_args();
-                 $arguments = func_get_args();
-                        if($arg_num >=4 && $arg_num%2 == 0){
-                              if(!data_base_query::db_conn($arguments[0])){
-                                     return -1;
-                              }
-                              $Q = "INSERT INTO $arguments[1] (";
-                              $x = 2;
-                              while($x < ($arg_num-2)/2+2){
-                                    if($x == 2){
-                                           $Q = $Q.$arguments[$x];
-                                    }else{
-                                           $Q = $Q." , ".$arguments[$x];
-                                    }
-                                    $x++;
-                              }
-                             $Q = $Q.") VALUES ("; 
-                             while($x < $arg_num){
-                                    if($x == ($arg_num-2)/2+2){
-                                           $Q = $Q."'".$arguments[$x]."'";
-                                    }else{
-                                           $Q = $Q.",'".$arguments[$x]."'";
-                                    }
-                                    $x++;
-                              }
-                              $Q = $Q." )";
-                              if(mysqli_query($this->link_open,$Q)){ 
-                                    if($result = mysqli_affected_rows($this->link_open)){              
-                                           mysqli_close($this->link_open);
-                                           return $result;
-                                     }else{
-                                            mysqli_close($this->link_open);
-                                            return -1;
-                                     }
-                              }else{
-                                          mysqli_close($this->link_open);      
-                                          return -1;
-                              }
-                       }else{
-                              return -1;
-                       }
-        }
-        function delete(){
-                   $arg_num = func_num_args();
-                   $arguments = func_get_args();
-                   if($arg_num == 4 || $arg_num == 6){
-                        if(!data_base_query::db_conn($arguments[0])){
-                                return -1;
-                         }
-                         if($arg_num == 4){
-                               if($arguments[3] == "NULL"){
-                                         $Q = "DELETE FROM $arguments[1] WHERE $arguments[2] IS $arguments[3]"; 
-                                }else{
-                                         $Q = "DELETE FROM $arguments[1] WHERE $arguments[2] = '$arguments[3]'"; 
-                                }
-                         }
-                         else if($arg_num == 6){
-                                $Q = "DELETE FROM $arguments[1] WHERE $arguments[2] ";
-                                if($arguments[3] == "NULL"){
-                                         $Q = $Q." IS ".$arguments[3]." AND $arguments[4]";
-                                }else{
-                                         $Q = $Q." = '".$arguments[3]."' AND $arguments[4]";
-                                }
-                                if($arguments[5] == "NULL"){
-                                         $Q = $Q." IS ".$arguments[5];
-                                }else{
-                                         $Q = $Q." = '".$arguments[5]."'";
-                                }
-                         }
-                         if(mysqli_query($this->link_open,$Q)){
-                                  if($result = mysqli_affected_rows($this->link_open)){  
-                                        mysqli_close($this->link_open);
-                                        return $result;
-                                  }else{
-                                         mysqli_close($this->link_open);
-                                         return -1 ;
-                                  }
-                         }else{
-                                        mysqli_close($this->link_open);
-                                        return -1;
-                         } 
-                    }else{
-                         return -1;
-                    }
-          }
-          function search_value(){
-                   $arg_num = func_num_args();
-                   $arguments = func_get_args();
-                     if($arg_num > 4){
-                               if(!data_base_query::db_conn($arguments[0])){
-                                        return -1;
-                                }
-                               $Q = "SELECT ";
-                               $x = 2;
-                               while($x < $arg_num-2){
+       }
 
-                                   if($x == 2){
-                                         $Q = $Q.$arguments[$x];
-                                   }else{
-                                         $Q = $Q." , ".$arguments[$x];
-                                   }
-                                   $x++;
-                               }
-                              $Q = $Q." FROM ". $arguments[1] . " WHERE ". $arguments[$x] ." LIKE  '". $arguments[++$x]."'";
-                              if($runquery = mysqli_query($this->link_open,$Q)){
-                                     if(mysqli_num_rows($runquery) > 0){
-                                         $result = array();
-                                         while($data = mysqli_fetch_array($runquery)){
-                                               if($arg_num == 5){
-                                                    $result[] =  $data[$arguments[2]];
-                                                }else if($arg_num > 3){
-                                                    $x = 2;
-                                                    while($x < $arg_num-2){
-                                                        $result[$x-2][] = $data[$arguments[$x]];
-                                                         $x++;
-                                                     }
-                                                }                                       
-                                          }
-                                          mysqli_close($this->link_open);
-                                          return $result;
-                                     }else if(mysqli_num_rows($runquery) == 0){
-                                          return 0;
-                                     }else{
-                                          mysqli_close($this->link_open);
-                                          return -1;
-                                      }
-                              }else{
-                                       mysqli_close($this->link_open);
-                                       return -1;
-                               }
-                     }else{
-                             return -1;
-                     }
-             }
-      function update_value(){
-            $arg_num = func_num_args();
-            $arguments = func_get_args();
-            if($arg_num >=6 && $arg_num%2 == 0){
-                    $arg_num = $arg_num-4;
-                    if(!data_base_query::db_conn($arguments[0])){
-                            return -1;
-                     }
-                    $Q = "UPDATE $arguments[1] SET ";
-                    $x = 2;
-                    while($x < $arg_num+2){
-                         if($x == 2){
-                                  $Q = $Q." ".$arguments[$x] ." = '". $arguments[++$x]."' ";
-                          }else{
-                                  $Q = $Q." , ".$arguments[$x] ." = '". $arguments[++$x]."'  ";
-                          }
-                          $x++;
-                     }
-                    $Q = $Q." WHERE ". $arguments[$x];
-                    if($arguments[++$x] == "NULL"){
-                        $Q = $Q." IS ".$arguments[$x];
-                    }else{
-                        $Q = $Q." = '".$arguments[$x]."'";
-                    }
-                   if($runquery = mysqli_query($this->link_open,$Q)){
-                         if($result = mysqli_affected_rows($this->link_open)){               
-                               mysqli_close($this->link_open);
-                               return $result;
-                          }else{
-                               mysqli_close($this->link_open);
-                               return -1;
-                          }
-                    }else{
-                            mysqli_close($this->link_open);      
-                            return -1;
-                    }
-             }else{
-                    return -1;
-            }
- }
- function d_update_value(){
-            $arg_num = func_num_args();
-            $arguments = func_get_args();
-            if($arg_num >=8 && $arg_num%2 == 0){
-                    $arg_num = $arg_num-6;
-                    if(!data_base_query::db_conn($arguments[0])){
-                            return -1;
-                     }
-                    $Q = "UPDATE $arguments[1] SET ";
-                    $x = 2;
-                    while($x < $arg_num+2){
-                         if($x == 2){
-                                  $Q = $Q." ".$arguments[$x] ." = '". $arguments[++$x]."' ";
-                          }else{
-                                  $Q = $Q." , ".$arguments[$x] ." = '". $arguments[++$x]."'  ";
-                          }
-                          $x++;
-                     }
-                    $Q = $Q."  WHERE ". $arguments[$x];
-                     if($arguments[++$x] == "NULL"){
-                              $Q = $Q." IS ".$arguments[$x]." AND ".$arguments[++$x];
-                     }else{
-                              $Q = $Q." = '".$arguments[$x]."' AND ".$arguments[++$x];
-                     }
-                     if($arguments[++$x] == "NULL"){
-                              $Q = $Q." IS ".$arguments[$x];
-                     }else{
-                              $Q = $Q." = '".$arguments[$x]."'";
-                     }
-                   if($runquery = mysqli_query($this->link_open,$Q)){
-                        if($result = mysqli_affected_rows($this->link_open)){               
-                               mysqli_close($this->link_open);
-                               return $result;
-                        }else{
-                               mysqli_close($this->link_open);
-                               return -1;
-                        }
-                    }else{
-                            mysqli_close($this->link_open);      
-                            return -1;
-                    }
-             }else{
-                    return -1;
-             }
- }
- function return_value(){
-         $arg_num = func_num_args();
-         $arguments = func_get_args();
-         if($arg_num > 2){
-             if(!data_base_query::db_conn($arguments[0])){
-                        return -1;
-               }
-             $Q = "SELECT ";
-             $x = 2;
-               while($x < $arg_num){
-                    if($x == 2){
-                         $Q = $Q." ".$arguments[$x];
-                     }else{
-                         $Q = $Q." , ".$arguments[$x];
-                    }
-                    $x++;
-               }
-               $Q = $Q." FROM ".$arguments[1];
-               if($runquery = mysqli_query($this->link_open,$Q)){
-                     if(mysqli_num_rows($runquery) > 0){
-                           $result = array();
-                           while($data = mysqli_fetch_array($runquery)){
-                                if($arg_num == 3){
-                                     $result[] =  $data[$arguments[2]];
-                                 }else if($arg_num > 3){
-                                     $x = 2;
-                                     while($x < $arg_num){
-                                         $result[$x-2][] = $data[$arguments[$x]];
-                                         $x++;
-                                     }
-                                 }                                       
-                            }
-                            mysqli_close($this->link_open);
-                            return $result;
-                     }else if(mysqli_num_rows($runquery) == 0){
-                            mysqli_close($this->link_open);
-                            return 0;
-                     }else{
-                            mysqli_close($this->link_open);
-                            return -1 ;
-                     }
-                }else{
-                            mysqli_close($this->link_open);
-                            return -1 ;
-                }
-           }else{
+      function run() {
+
+          if(!self::db_conn()){
                return -1;
           }
- }
- function return_match_value(){
-       $arg_num = func_num_args();
-        $arguments = func_get_args();
-         if($arg_num > 4){
-              if(!data_base_query::db_conn($arguments[0])){
-                        return -1;
-               }
-             $Q = "SELECT ";
-             $x = 2;
-               while($x < $arg_num-2){
-                    if($x == 2){
-                         $Q = $Q." ".$arguments[$x];
-                     }else{
-                         $Q = $Q." , ".$arguments[$x];
-                    }
-                    $x++;
-               }
-               $Q = $Q." FROM ".$arguments[1]." WHERE ".$arguments[$x];
-                if($arguments[++$x] == "NULL"){
-                  $Q = $Q." IS ".$arguments[$x];
-                }else{
-                  $Q = $Q." = '".$arguments[$x]."'";
-                }
-              
-               if($runquery = mysqli_query($this->link_open,$Q)){
-                     if(mysqli_num_rows($runquery) > 0){
+
+          $query_parts = explode(" ",$this->query);
+
+          if($query_parts[0] == "SELECT") {
+
+                     $from_key = array_search("FROM",$query_parts);
+
+                     if($runquery = mysqli_query($this->link_open,$this->query)) {
+
+                        if(mysqli_num_rows($runquery) >= 1) {
+                           
                            $result = array();
-                           while($data = mysqli_fetch_array($runquery)){
-                                if($arg_num == 5){
-                                     $result[] =  $data[$arguments[2]];
-                                 }else {
-                                     $x = 2;
-                                     while($x < $arg_num-2){
-                                         $result[$x-2][] = $data[$arguments[$x]];
-                                         $x++;
+                           
+                           while($data = mysqli_fetch_array($runquery)) {
+
+                                if($from_key == 2) {
+
+                                     $result[] =  $data[$query_parts[1]];
+                                 
+                                 } else if($from_key > 2){
+                                     
+                                     $x = 1;
+                                     
+                                     $index = 0;
+                                     
+                                     while($x < $from_key){
+
+                                         $result[$index][] = $data[$query_parts[$x]];
+                                     
+                                         $x = $x+2;
+                                     
+                                         $index++;
                                      }
-                                 }                                       
+                                 }
                             }
                             mysqli_close($this->link_open);
                             return $result;
-                     }else if(mysqli_num_rows($runquery) == 0){
-                            mysqli_close($this->link_open);
-                            return 0;
-                     }else{
-                            mysqli_close($this->link_open);
-                            return -1 ;
-                     }
-                }else{
-                            mysqli_close($this->link_open);
-                            return -1 ;
-                }
-        }else{
-             return -1;
-        }
- }
- function return_d_match_value(){
-       $arg_num = func_num_args();
-        $arguments = func_get_args();
-         if($arg_num > 6){
-              if(!data_base_query::db_conn($arguments[0])){
-                        return -1;
-               }
-               $Q = "SELECT ";
-               $x = 2;
-               while($x < $arg_num-4){
-                    if($x == 2){
-                         $Q = $Q." ".$arguments[$x];
-                     }else{
-                         $Q = $Q." , ".$arguments[$x];
-                    }
-                    $x++;
-               }
-               $Q = $Q." FROM ".$arguments[1]." WHERE ".$arguments[$x];
+                     } else {
 
-               if($arguments[++$x] == "NULL"){
-                    $Q = $Q." IS ".$arguments[$x]." AND ". $arguments[++$x];
-               }else{
-                    $Q = $Q." ='".$arguments[$x]."' AND ".$arguments[++$x];
-               }
-               if($arguments[++$x] == "NULL"){
-                    $Q = $Q." IS ".$arguments[$x];
-               }else{
-                    $Q = $Q." = '".$arguments[$x]."'";
-               }
-
-               if($runquery = mysqli_query($this->link_open,$Q)){
-                     if(mysqli_num_rows($runquery) > 0){
-                           $result = array();
-                           while($data = mysqli_fetch_array($runquery)){
-                                if($arg_num == 7){
-                                     $result[] =  $data[$arguments[2]];
-                                 }else{
-                                     $x = 2;
-                                     while($x < $arg_num-4){
-                                         $result[$x-2][] = $data[$arguments[$x]];
-                                         $x++;
-                                     }
-                                 }                                       
-                            }
                             mysqli_close($this->link_open);
-                            return $result;
-                     }else if(mysqli_num_rows($runquery) == 0){
-                            mysqli_close($this->link_open);
-                            return 0;
-                     }else{
-                            mysqli_close($this->link_open);
-                            return -1 ;
-                     }
-                }else{
-                            mysqli_close($this->link_open);
-                            return -1 ;
-                }
-        }else{
-            return -1;
-        }
- } 
- function drop_table(){
-           $args_num = func_num_args();
-           $arguments = func_get_args();
-           if($args_num == 2){
-                  if(!data_base_query::db_conn($arguments[0])){
-                        return  -1;
-                  }
-                  $Q = "DROP TABLE $arguments[1]";
-                  if(mysqli_query($this->link_open,$Q)){
-                        mysqli_close($this->link_open);
-                        return 1;
-                  }else{
-                        mysqli_close($this->link_open);
-                        return -1;
-                  }
-           }else{
-                    mysqli_close($this->link_open);
-                    return -1;
-           }
- }
-  function add_field(){
-           $args_num = func_num_args();
-           $arguments = func_get_args();
-           if($args_num == 4){
-               if(!data_base_query::db_conn($arguments[0])){
-                        return -1;
-               }
-              $Q = "ALTER TABLE $arguments[1] ADD $arguments[2] $arguments[3]";
-              if(mysqli_query($this->link_open,$Q)){
-                   mysqli_close($this->link_open);
-                   return 1;
-              }else{
-                   mysqli_close($this->link_open);
-                   return -1;
-              }
-           }else{
-                  return -1;
-           }
-  }
-  function remove_field(){
-            $args_num = func_num_args();
-            $arguments = func_get_args();
-            if($args_num > 2){
-                   if(!data_base_query::db_conn($arguments[0])){
-                          return -1;
-                   }
-                   $Q = "ALTER TABLE $arguments[1] DROP ";
-                   $x = 2;
-                   while($x < $args_num){
-                          if($x == 2){       
-                                    $Q = $Q.$arguments[$x];
-                          }else{
-                                    $Q = $Q.", DROP ".$arguments[$x];
-                          }
-                          $x++;
-                   }
-                   if(mysqli_query($this->link_open,$Q)){
-                                  mysqli_close($this->link_open);
-                                  return 1;
-                   }else{
-                            mysqli_close($this->link_open);
-                            return -1;
-                   }
-            }else{
-                  return -1;
-            }
-  }
-     function select_query(){           
-            $args_num = func_num_args();
-            $arguments = func_get_args();
-            if($args_num > 3){
-                 if(!data_base_query::db_conn($arguments[0])){
-                          return -1;
-                   }
-                  $Q = "SELECT ";  
-                   $x = 2;
-                   while($x < $args_num-1){   
-                       if($x == 2){
-                            $Q = $Q.$arguments[$x];
-                       }else{
-                            $Q = $Q.",".$arguments[$x];
-                       }
-                       $x++;
-                   }
-                   $Q = $Q." FROM ".$arguments[1]." ".$arguments[$x];
-                   if($runquery = mysqli_query($this->link_open,$Q)){
-                        if(mysqli_num_rows($runquery) >= 1){
-                              $result = array();
-                              while($data = mysqli_fetch_array($runquery)){
-                                   if($args_num == 4){
-                                         $result[] =  $data[$arguments[2]];
-                                    }  else {
-                                         $x = 2;
-                                         while($x < $args_num-1){
-                                              $result[$x-2][] = $data[$arguments[$x]];
-                                              $x++;
-                                         }
-                                   }                                       
-                              }
-                            mysqli_close($this->link_open);
-                            return $result;
-                        }else if(mysqli_num_rows($runquery) == 0){
-                            mysqli_close($this->link_open);
+                            
                             return 0 ;
-                         }
-                    }else{
-                            mysqli_close($this->link_open);
-                            return -1 ;
-                   }
-            }else{ 
-                  return -1;
-            }
-  }
-    function change_field(){
-            $args_num = func_num_args();
-            $arguments = func_get_args();
-            if($args_num = 3){
-                   if(!data_base_query::db_conn($arguments[0])){
-                          return -1;
-                   }
-                   $Q = "ALTER TABLE $arguments[1] CHANGE $arguments[2]";
-                   if(mysqli_query($this->link_open,$Q)){
-                                  mysqli_close($this->link_open);
-                                  return 1;
-                   }else{
-                            mysqli_close($this->link_open);
-                            return -1;
-                   }
-            }else{
-                  return -1;
-            }
-  }
-  function rename_table(){
-            $args_num = func_num_args();
-            $arguments = func_get_args();
-            if($args_num = 3){
-                   if(!data_base_query::db_conn($arguments[0])){
-                          return -1;
-                   }
-                   $Q = "ALTER TABLE $arguments[1] RENAME TO $arguments[2] ";
-                   if(mysqli_query($this->link_open,$Q)){
-                                  mysqli_close($this->link_open);
-                                  return 1;
-                   }else{
-                            mysqli_close($this->link_open);
-                            return -1;
-                   }
-            }else{
-                  return -1;
-            }
-  }
-     function join_select(){
-          $args_num = func_num_args();
-          $arguments = func_get_args();
-          if($args_num > 2){
-                  if(!data_base_query::db_conn($arguments[0])){
-                        return -1;
-                   }
-                  $Q = "SELECT ";
-                  $x = 1;
-                  while($x < $args_num-1){
-                      if($x == 1){
-                           $Q = $Q.$arguments[$x];
-                      }else{
-                           $Q = $Q.",".$arguments[$x];
-                      }
-                      $x++;
-                  }
-                  $Q = $Q." ".$arguments[$x];
-                 if($runquery = mysqli_query($this->link_open,$Q)){
-                      if(mysqli_num_rows($runquery) >= 1){
-                           $result = array();
-                           while($data = mysqli_fetch_array($runquery)){
-                               if($args_num == 3){
-                                   $result[] =  $data[$arguments[2]];
-                                }else {
-                                    $x = 1;
-                                     while($x < $args_num-1){
-                                         $result[$x-1][] = $data[$arguments[$x]];
-                                         $x++;
-                                      }
-                                }
-                            }
-                            mysqli_close($this->link_open);
-                             return $result;
-                        }else if(mysqli_num_rows($runquery) == 0){
-                           mysqli_close($this->link_open);
-                           return 0 ;
-                        }
-                  }else{
-                       mysqli_close($this->link_open);
-                       return -1 ;
-                 }
-          }else{
-                 return -1;
-         }
-  }
-  function query_runner(){
+                     }
+                 } else {
+                   
+                     return -1;
+               }
 
-            $args_num = func_num_args();
-            $arguments = func_get_args();
-            if($args_num = 2){
-                   if(!data_base_query::db_conn($arguments[0])){
-                          return -1;
-                   }
-                   $Q = "$arguments[1]";
-                   if(mysqli_query($this->link_open,$Q)){
-                                  mysqli_close($this->link_open);
-                                  return 1;
-                   }else{
+            
+
+          } else if ($this->grand_child == "DROP_TABLE" || $this->grand_child == "ALTER_TABLE") {
+ 
+                 if(mysqli_query($this->link_open,$Q)) {
+
+                        mysqli_close($this->link_open);
+
+                        return 1;
+                  } else {
+                        
+                        mysqli_close($this->link_open);
+
+                        return 0;
+                  }
+  
+          } else {
+
+                    if($runquery = mysqli_query($this->link_open,$this->query)) {
+
+                         if($result = mysqli_affected_rows($this->link_open)) {
+
+                               mysqli_close($this->link_open);
+
+                               return $result;
+
+                         } else {
+                             
+                               mysqli_close($this->link_open);
+
+                               return -1;
+                        }
+                    } else {
+
                             mysqli_close($this->link_open);
+
                             return -1;
-                   }
-            }else{
-                  return -1;
-            }
+                    }
+          }
       }
-}  
-?>
+
+  }
+  class where_class extends runner {
+
+      public $query;
+
+      function __construct($para , $grand_child = "") {
+
+           $this->query = $para;
+
+           $this->grand_child = $grand_child;
+
+      } 
+
+      function where($para) {
+
+          $this->query = $this->query." WHERE ".$para;
+
+          return $this;
+
+      }
+
+      function order_by($order_by){
+
+          $this->query = $this->query." ORDER BY ".$order_by;
+
+          return $this;
+          
+      }
+
+      function group_by(){
+
+          $this->query = $this->query." GROUP BY ".$order_by;
+
+          return $this;
+
+      }
+
+     function having(){
+
+          $this->query = $this->query." HAVING ".$order_by;
+
+          return $this;
+
+      }
+  }
+
+
+
+  class from_table {
+
+      var $query;
+
+      var $child;
+
+      function __construct($para,$child = "") {
+
+          $this->query = $para;
+
+          $this->child = $child;
+          
+      }
+
+      function from() {
+
+           $this->query = $this->query." FROM ";
+
+           $table = "";
+
+           $params = func_get_args();
+
+           foreach($params as $arg) {
+
+                if($table == "") {
+ 
+                       $table = $arg;
+
+                } else {
+
+                      $table = $table." , ".$arg;
+
+                }
+
+           }
+
+           $this->query = $this->query.$table;
+ 
+           return new where_class($this->query,$this->child);       
+           
+      }
+
+      function values(){
+
+          $this->query = $this->query." VALUES (";
+
+          $values = "";
+
+          $params = func_get_args();
+
+           foreach($params as $arg) {
+
+                if($values == "") {
+ 
+                       $values = "'".$arg."'";
+
+                } else {
+
+                      $values = $values." , '".$arg."'";
+
+                }
+
+           }
+
+           $this->query = $this->query.$values." )";
+
+           return new where_class($this->query);
+
+      }
+
+      function set(){
+
+          $changes = "";
+
+          $params = func_get_args();
+
+          $this->query = $this->query." SET ";
+
+          foreach($params as $change) {
+              
+              if($changes == "") {
+
+                 $changes = $changes.$change;
+              } else {
+
+                  $changes = $changes." , ".$change;
+              }
+
+          }
+
+          $this->query = $this->query.$changes;
+          
+          return new where_class($this->query);
+
+      }
+
+      function modify($new_modified) {
+
+         $this->query = $this->query." MODIFY ".$new_modified;
+
+         return new where_class($this->query);
+
+      }
+
+      function add($new_added) {
+
+         $this->query = $this->query." ADD ".new_added;
+
+         return new where_class($this->query);
+      }
+
+      function drop($prev_droped) {
+
+          $this->query = $this->query." DROP ".$prev_droped;
+
+          return new where_class($this->query);
+      }
+
+      function change($new_change) {
+
+          $this->query = $this->query." CHANGE ".$new_change;
+
+          return new where_class($this->query);
+      }
+
+      function rename_to($new_name) {
+
+          $this->query = $this->query." RENAME TO ".$prev_droped;
+
+          return new where_class($this->query);
+
+      }
+
+  }
+
+
+
+  class DB {
+
+      function select() {
+
+            $params = func_get_args();
+
+            $query = "SELECT ";
+
+            foreach($params as $arg) {
+              
+                if($query == "SELECT ") {
+
+                     $query = $query.$arg;
+
+                } else {
+
+                    $query = $query." , ".$arg;
+                }
+                
+            }
+          
+            return  new from_table($query,"SELECT");
+      }
+
+      function insert_into(){
+
+            $params = func_get_args();
+
+            $query = "INSERT INTO ".$params[0]." (";
+
+            $x = $query;
+
+            array_shift($params);
+        
+
+            foreach($params as $arg) {
+              
+                if($query == $x) {
+
+                     $query = $query.$arg;
+
+                } else {
+
+                    $query = $query.",".$arg;
+                }
+                
+            }
+
+            $query = $query." )";
+          
+            return  new from_table($query,"INSERT");
+
+      }
+
+      function update($table) {
+
+          $query = "UPDATE ".$table;
+           
+          return new from_table($query,"UPDATE");
+      }
+
+      function alter_table($table){
+
+          $query = "ALTER TABLE ".$table;
+
+          return new from_table($query,"ALTER_TABLE");
+
+      }
+
+      function drop_table($table) {
+
+          $query = 'DROP TABLE '.$table;
+
+          return new where_class($query,"DROP_TABLE");
+
+      }
+
+      function delete($table) {
+
+          $query = "DELETE FROM ".$table;
+
+          return new where_class($query,"DELETE");
+
+      }
+
+  }
+
+
+
+
+  ?>
