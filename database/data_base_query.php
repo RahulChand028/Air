@@ -381,7 +381,7 @@
 
       }
 
-      function delete($table) {
+      function delete_from($table) {
 
           $query = "DELETE FROM ".$table;
 
