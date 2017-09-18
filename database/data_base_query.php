@@ -273,7 +273,7 @@
 
       function add($new_added) {
 
-         $this->query = $this->query." ADD ".new_added;
+         $this->query = $this->query." ADD ".$new_added;
 
          return new where_class($this->query);
       }
