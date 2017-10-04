@@ -13,7 +13,7 @@
 
         function db_conn(){
 
-            $this->link_open = mysqli_connect($this->domain,$this->admin,"");
+            $this->link_open = mysqli_connect($this->domain,$this->admin,$this->password);
             if(!$this->link_open){
                    //mysqli_connect_error();
                    return 0;
